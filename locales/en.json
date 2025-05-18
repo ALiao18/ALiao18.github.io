@@ -49,9 +49,28 @@
   "cv": {
     "title": "Curriculum Vitae | Andrew Liao",
     "headingTitle": "Curriculum Vitae",
+    "pdfLabel": "(PDF)",
     "intro": "My education, experience, and skills.",
     "downloadLabel": "Download PDF",
-    "viewPdf": "Please view my CV using the PDF link above."
+    "viewPdf": "Please view my CV using the PDF link above.",
+    "education": {
+      "title": "Education"
+    },
+    "experience": {
+      "title": "Experience"
+    },
+    "skills": {
+      "title": "Skills",
+      "programming": "Programming",
+      "frameworks": "Frameworks & Libraries",
+      "languages": "Languages"
+    },
+    "projects": {
+      "title": "Projects"
+    },
+    "awards": {
+      "title": "Awards & Honors"
+    }
   },
   "blog": {
     "title": "Blog | Andrew Liao",

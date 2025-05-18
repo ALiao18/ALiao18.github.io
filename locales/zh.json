@@ -49,9 +49,28 @@
   "cv": {
     "title": "個人履歷 | 廖英劭",
     "headingTitle": "個人履歷",
+    "pdfLabel": "(PDF)",
     "intro": "我的教育背景、經驗和技能。",
     "downloadLabel": "下載PDF",
-    "viewPdf": "請使用上方的PDF連結查看我的履歷。"
+    "viewPdf": "請使用上方的PDF連結查看我的履歷。",
+    "education": {
+      "title": "教育背景"
+    },
+    "experience": {
+      "title": "工作經驗"
+    },
+    "skills": {
+      "title": "技能",
+      "programming": "程式設計",
+      "frameworks": "框架與函式庫",
+      "languages": "語言能力"
+    },
+    "projects": {
+      "title": "專案經歷"
+    },
+    "awards": {
+      "title": "獎項與榮譽"
+    }
   },
   "blog": {
     "title": "部落格 | 廖英劭",

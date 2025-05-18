@@ -609,8 +609,90 @@ footer {
   margin-bottom: 2rem;
 }
 
+.cv-sections {
+  margin-top: 2rem;
+}
+
+.cv-expandable {
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.cv-expandable.ready {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.cv-expandable summary {
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 600;
+  position: relative;
+  list-style: none;
+  background-color: var(--card-background);
+  transition: background-color 0.2s ease;
+}
+
+.cv-expandable summary::-webkit-details-marker {
+  display: none;
+}
+
+.cv-expandable summary::after {
+  content: '▾';
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.3s ease;
+}
+
+.cv-expandable[open] summary::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.cv-expandable summary:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.dark-mode .cv-expandable summary:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.cv-content {
+  padding: 1rem 1.5rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .dark-mode .cv-pdf-link {
   color: var(--accent-color);
+}
+
+.dark-mode .cv-expandable {
+  border-color: var(--border-color);
 }
 
 /* Legacy CV styles below */

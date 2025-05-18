@@ -50,10 +50,52 @@
   <main class="container">
     <div class="cv-header">
       <h1 data-i18n="cv.headingTitle">Curriculum Vitae</h1>
-      <a href="assets/AndrewLiao_Resume.pdf" target="_blank" rel="noopener noreferrer" class="cv-pdf-link">(PDF)</a>
+      <a href="assets/AndrewLiao_Resume.pdf" target="_blank" rel="noopener noreferrer" class="cv-pdf-link" data-i18n="cv.pdfLabel">(PDF)</a>
     </div>
     
     <p class="cv-note" data-i18n="cv.viewPdf">Please view my CV using the PDF link above.</p>
+    
+    <div class="cv-sections">
+      <!-- Education Section -->
+      <details class="cv-expandable">
+        <summary data-i18n="cv.education.title">Education</summary>
+        <div class="cv-content">
+          <!-- Content will be added later -->
+        </div>
+      </details>
+      
+      <!-- Experience Section -->
+      <details class="cv-expandable">
+        <summary data-i18n="cv.experience.title">Experience</summary>
+        <div class="cv-content">
+          <!-- Content will be added later -->
+        </div>
+      </details>
+      
+      <!-- Skills Section -->
+      <details class="cv-expandable">
+        <summary data-i18n="cv.skills.title">Skills</summary>
+        <div class="cv-content">
+          <!-- Content will be added later -->
+        </div>
+      </details>
+      
+      <!-- Projects Section -->
+      <details class="cv-expandable">
+        <summary data-i18n="cv.projects.title">Projects</summary>
+        <div class="cv-content">
+          <!-- Content will be added later -->
+        </div>
+      </details>
+      
+      <!-- Awards Section -->
+      <details class="cv-expandable">
+        <summary data-i18n="cv.awards.title">Awards & Honors</summary>
+        <div class="cv-content">
+          <!-- Content will be added later -->
+        </div>
+      </details>
+    </div>
   </main>
 
   <footer>
@@ -121,6 +163,16 @@
         }
       });
     }
+    
+    // Initialize expandable sections
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add animation class after a small delay to allow initial rendering
+      setTimeout(() => {
+        document.querySelectorAll('.cv-expandable').forEach(section => {
+          section.classList.add('ready');
+        });
+      }, 100);
+    });
   </script>
 </body>
 </html>
