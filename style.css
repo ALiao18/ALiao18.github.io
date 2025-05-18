@@ -502,66 +502,66 @@ section li {
 }
 
 /* DARK MODE */
-body.dark {
+.dark-mode {
   background-color: #121212;
   color: #f0f0f0;
 }
 
-body.dark .navbar {
+.dark-mode .navbar {
   background-color: #121212;
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-body.dark .nav-divider {
+.dark-mode .nav-divider {
   border-top: 1px solid #000;
 }
 
-body.dark .navbar a {
+.dark-mode .navbar a {
   color: #f0f0f0;
 }
 
-body.dark .navbar .nav-left .nav-title {
+.dark-mode .navbar .nav-left .nav-title {
   color: #f0f0f0;
 }
 
-body.dark h2:hover {
+.dark-mode h2:hover {
   border-bottom: 2px solid #888;
 }
 
-body.dark .icon-button:hover {
+.dark-mode .icon-button:hover {
   background-color: rgba(255,255,255,0.1);
 }
 
-body.dark a {
+.dark-mode a {
   color: #4d9fff;
 }
 
-body.dark a:hover {
+.dark-mode a:hover {
   color: #77b7ff;
 }
 
-body.dark a:focus {
+.dark-mode a:focus {
   outline-color: #4d9fff;
 }
 
-body.dark .subtitle {
+.dark-mode .subtitle {
   color: #ccc;
 }
 
-body.dark .headshot {
+.dark-mode .headshot {
   border-color: #444;
 }
 
-body.dark .notes-sidebar {
+.dark-mode .notes-sidebar {
   background-color: #121212;
   border-right: 1px solid rgba(255,255,255,0.1);
 }
 
-body.dark .notes-sidebar a:hover {
+.dark-mode .notes-sidebar a:hover {
   background-color: rgba(255,255,255,0.05);
 }
 
-body.dark .notes-sidebar a.active {
+.dark-mode .notes-sidebar a.active {
   background-color: rgba(255,255,255,0.08);
 }
 
@@ -573,7 +573,7 @@ footer {
   color: #666;
 }
 
-body.dark footer {
+.dark-mode footer {
   color: #999;
 }
   

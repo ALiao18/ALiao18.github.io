@@ -1,15 +1,13 @@
 # ALiao18.github.io - Personal Website
 
-A clean, responsive personal website designed for academic and professional presence with multilingual support, dark mode, and multiple sections.
-
-![Andrew Liao's Website](assets/screenshot.png)
+A personal website designed for academic and professional presence with multilingual support, dark mode, and multiple sections.
 
 ## Contents
 
 - [Overview](#overview)
 - [Features](#features)
   - [Current Features](#current-features)
-  - [Planned Features](#planned-features)
+  - [Future Plans](#future-plans)
 - [Structure](#structure)
 - [Technical Implementation](#technical-implementation)
 - [Adding Content](#adding-content)
@@ -19,8 +17,9 @@ A clean, responsive personal website designed for academic and professional pres
   - [Projects](#adding-projects)
   - [Videos](#adding-videos)
 - [Multilingual Support](#multilingual-support)
+- [Personalization Features](#personalization-features)
+- [Performance Optimizations](#performance-optimizations)
 - [Security](#security)
-- [Optimization](#optimization)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -33,9 +32,23 @@ This website serves as a personal portfolio for Andrew Liao, including sections 
 ### Current Features
 
 - **Responsive Design**: Adapts to various screen sizes and devices
-- **Dark Mode**: Toggle between light and dark themes
+- **Dark Mode**: Toggle between light and dark themes with persistent preference
+- **Social Links**: GitHub, LinkedIn, and Email with theme-aware icons
 - **Accessibility**: ARIA labels, keyboard navigation, and semantic HTML
-- **Multilingual Elements**: Support for Chinese name display (廖英劭)
+- **Full Multilingual Support**: 
+  - Complete English and Traditional Chinese (Taiwan) translations
+  - Language detection based on browser settings
+  - Language selector in the navigation
+- **Personalization System**:
+  - Welcome page with user type selection (Recruiter, Academic, Friends & Family)
+  - Type-specific content and recommendations
+  - Password protection for personal content
+- **Performance Optimizations**:
+  - Loading animations and page transitions
+  - Lazy image loading
+  - Animate-on-scroll effects
+  - Optimized caching with .htaccess configuration
+- **Error Handling**: Custom 404 page with multilingual support
 - **Section Pages**:
   - Home/About
   - Projects
@@ -44,19 +57,16 @@ This website serves as a personal portfolio for Andrew Liao, including sections 
   - Blog (with Markdown support)
   - Notes (with Markdown support)
   - Videos
-- **Social Links**: GitHub, LinkedIn, Email
-- **Clean Typography**: Space Mono for headings, Work Sans for body text
+- **Typography**: Space Mono for headings, Work Sans for body text, Noto Sans TC for Chinese
 
-### Planned Features
+### Future Plans
 
-1. **Loading Animations**: Smooth transitions and loading effects between pages and for content
-2. **Image Optimization**: Automated compression and responsive image loading
-3. **Publications Schema**: Advanced filtering and organization for academic publications
-4. **Blog Architecture**: Category-based filtering and improved folder structure
-5. **Interactive CV**: Dynamic, interactive curriculum vitae display
-6. **Contact Form**: Allow visitors to leave messages without sending emails
-7. **Full Multilingual Support**: Toggle between English and Chinese versions of all content
-8. **Password Protection**: Secure access to specific content for friends and family
+1. **Image Optimization**: Further improvements for responsive image loading
+2. **Publications Schema**: Advanced filtering and organization for academic publications
+3. **Blog Architecture**: Category-based filtering and improved folder structure
+4. **Interactive CV**: Dynamic, interactive curriculum vitae display
+5. **Contact Form**: Allow visitors to leave messages without sending emails
+6. **SEO Improvements**: Structured data and meta tag optimizations
 
 ## Structure
 
@@ -65,19 +75,38 @@ This website serves as a personal portfolio for Andrew Liao, including sections 
 ├── assets/                 # Images, icons, and other static files
 │   ├── headshot.jpg        # Profile photo
 │   ├── AndrewLiao_Resume.pdf # CV/Resume PDF
-│   ├── github.svg          # SVG icons
+│   ├── github.black.svg    # SVG icons (dark theme versions)
+│   ├── github.white.svg    # SVG icons (light theme versions)
 │   └── ...
 ├── blog/                   # Blog section
 │   ├── index.html          # Blog landing page
-│   └── posts/              # Individual blog posts as markdown files
+│   └── posts/              # Individual blog posts
 ├── notes/                  # Notes section
 │   ├── index.html          # Notes landing page
 │   └── ...                 # Individual note files
+├── css/                    # CSS stylesheets
+│   ├── i18n.css            # Internationalization styles
+│   ├── personalization.css # User type personalization styles
+│   ├── animations.css      # Animation styles
+│   └── ...
+├── js/                     # JavaScript files
+│   ├── i18n.js             # Multilingual support
+│   ├── user-personalization.js # User type handling
+│   ├── lazy-load.js        # Lazy loading for images
+│   ├── loader.js           # Page loading animations
+│   ├── aos.js              # Animate-on-scroll functionality
+│   └── ...
+├── locales/                # Translation files
+│   ├── en.json             # English translations
+│   └── zh.json             # Traditional Chinese translations
 ├── index.html              # Home page
+├── welcome.html            # Welcome/personalization page
 ├── projects.html           # Projects page
 ├── publications.html       # Publications page
 ├── videos.html             # Videos page
 ├── cv.html                 # CV/Resume page
+├── 404.html                # Custom error page
+├── .htaccess               # Server configuration
 └── style.css               # Main stylesheet
 ```
 
@@ -85,11 +114,13 @@ This website serves as a personal portfolio for Andrew Liao, including sections 
 
 The website is built with vanilla HTML, CSS, and JavaScript, with no dependencies on heavy frameworks. Key technical aspects include:
 
-- **Vanilla JavaScript**: For interactive elements and dark mode toggle
+- **Vanilla JavaScript**: For interactive elements, dark mode, and language switching
 - **CSS Variables**: For consistent theming and easy customization
+- **Internationalization**: Custom i18n system with JSON translation files
+- **User Personalization**: User type detection and content customization
+- **Performance Optimizations**: Lazy loading, animations, and caching
 - **Markdown Support**: Using marked.js for rendering blog posts and notes
 - **Math Typesetting**: Using KaTeX for mathematical notation
-- **SVG Icons**: Lightweight, responsive icons for social links
 - **Responsive Design**: Using flexbox and media queries
 
 ## Adding Content
@@ -175,94 +206,122 @@ To add a new video:
 
 ### Current Implementation
 
-The site currently has basic multilingual elements:
-- Chinese name (廖英劭) displayed alongside English name
+The site now has full multilingual support:
 
-### Planned Full Implementation
+- **Language Toggle**: A dropdown in the navigation to switch languages
+- **Translation Files**: JSON files containing translations for all UI elements and content
+- **URL Structure**: Language query parameter support (e.g., `?lang=zh` for Chinese)
+- **Content Management**: Translations managed through data attributes
+- **Auto-Detection**: Automatically detects user's preferred language on first visit
+- **Persistence**: Remembers language preference across visits
 
-The website will support complete language switching between English and Chinese versions:
+### Internationalization Features
 
-1. **Language Toggle**: A button/dropdown in the navigation to switch languages
-2. **Translation Files**: JSON files containing translations for UI elements and content
-3. **URL Structure**: Language-specific URLs (e.g., `/zh/` for Chinese pages)
-4. **Content Management**: Parallel content structure for both languages
-5. **Auto-Detection**: Automatically detect user's preferred language on first visit
+1. **Language Switcher**: Easy language selection in the navigation
+2. **Data Attributes**: HTML elements use `data-i18n` attributes to specify translation keys
+3. **Dynamic Updates**: Real-time language switching without page reload
+4. **Language-Specific Styling**: Adjusted typography and spacing for Chinese characters
+5. **Fallback System**: Falls back to English when translations are missing
 
-#### Implementation Plan
-
-1. Create a language toggle in the navigation
-2. Set up translation files for UI elements
-3. Modify the JavaScript to handle language switching
-4. Create parallel content files for both languages
-5. Implement language detection based on browser settings
-
-#### Code Structure
+### Code Structure
 
 ```
 /
 ├── locales/               # Translation files
 │   ├── en.json            # English translations
-│   └── zh.json            # Chinese translations
-├── en/                    # English content (optional structure)
-│   ├── blog/
-│   └── ...
-└── zh/                    # Chinese content
-    ├── blog/
-    └── ...
+│   └── zh.json            # Traditional Chinese translations
+├── css/
+│   └── i18n.css           # Language-specific styles
+└── js/
+    └── i18n.js            # Language switching logic
 ```
+
+### Usage
+
+Adding translatable content:
+
+```html
+<h1 data-i18n="home.title">Default English Text</h1>
+<p data-i18n="home.description">This will be replaced with translation.</p>
+```
+
+Translation files structure:
+
+```json
+{
+  "home": {
+    "title": "Page Title",
+    "description": "Translated description text."
+  }
+}
+```
+
+## Personalization Features
+
+The website includes a personalization system that tailors content based on visitor type.
+
+### User Types
+
+1. **Recruiter**: Emphasizes professional accomplishments, projects, and skills
+2. **Academic**: Highlights research interests, publications, and academic background
+3. **Personal**: Shows more personal content for friends and family (password protected)
+
+### Implementation
+
+- **Welcome Page**: Initial selection screen for user type
+- **Password Protection**: Secure access to personal content
+- **Persistent Preferences**: Remembers user type across visits
+- **Visual Indicators**: Shows current personalization mode in the navigation
+- **Recommended Content**: Highlights relevant sections based on user type
+
+### Usage
+
+The personalization system is implemented with:
+
+- `welcome.html`: User type selection page
+- `js/user-personalization.js`: Logic for handling user types
+- `css/personalization.css`: Styling for personalized content
+
+## Performance Optimizations
+
+The website includes several performance optimizations:
+
+### Loading Animations
+
+- **Page Transitions**: Smooth fade transitions between pages
+- **Minimum Display Time**: Ensures loading animations don't flash briefly
+- **Conditional Display**: Only shows loader for slow-loading pages
+
+### Lazy Loading
+
+- **Image Lazy Loading**: Defers loading images until they're near the viewport
+- **Background Images**: Support for lazy loading CSS background images
+- **Intersection Observer**: Uses modern browser APIs for efficiency
+- **Fallbacks**: Graceful degradation for older browsers
+
+### Animation System
+
+- **Animate on Scroll**: Elements animate as they enter the viewport
+- **Staggered Animations**: Support for sequenced animations
+- **Performance Considerations**: Respects "reduced motion" preferences
+- **Utility Classes**: Reusable animation classes for consistent effects
+
+### Caching and Optimization
+
+- **.htaccess Configuration**: Server-side optimizations for caching
+- **GZIP Compression**: Reduces file sizes for faster loading
+- **Cache Control**: Appropriate cache headers for static assets
+- **Error Pages**: Custom 404 page with proper status codes
 
 ## Security
 
 ### Password Protection
 
-For the friends and family section, we'll implement client-side password protection:
+For the friends and family section, there's client-side password protection:
 
-1. **Implementation**: Using PageCrypt for client-side encryption
-2. **Access Control**: Separate landing page with password prompt
-3. **Security Considerations**: Clear explanations of limitations of client-side protection
-
-#### Usage
-
-```javascript
-// Example implementation with PageCrypt
-const protectedContent = document.getElementById('protected-content');
-const passwordInput = document.getElementById('password-input');
-const submitButton = document.getElementById('submit-password');
-
-submitButton.addEventListener('click', () => {
-  const password = passwordInput.value;
-  if (validatePassword(password)) {
-    decryptAndShowContent(password);
-  } else {
-    showErrorMessage();
-  }
-});
-```
-
-## Optimization
-
-### Image Optimization
-
-1. **Responsive Images**: Use srcset and sizes attributes
-2. **Format Selection**: WebP with JPEG fallback
-3. **Compression**: Automated optimization using tools like imagemin
-4. **Lazy Loading**: Load images only when they scroll into view
-
-### Loading Animations
-
-1. **Initial Loading**: Subtle spinner or progress indicator
-2. **Page Transitions**: Smooth fade or slide transitions between pages
-3. **Content Reveal**: Progressive loading of content sections
-4. **Performance Considerations**: Keep animations lightweight and optional
-
-### Performance Optimization
-
-1. **Minification**: Compress HTML, CSS, and JavaScript
-2. **Caching**: Appropriate cache headers for static assets
-3. **Code Splitting**: Load JavaScript only when needed
-4. **Critical CSS**: Inline critical styles
-5. **Preloading**: Preload important resources
-6. **Defer Non-Critical**: Defer loading of non-critical assets
+- **Hashed Password**: Uses SHA-256 for client-side verification
+- **User Token**: Generates authentication token on successful login
+- **Scope Limitation**: Clear boundaries between public and private content
 
 ## Contributing
 
@@ -270,4 +329,4 @@ This is a personal website, but suggestions and bug reports are welcome. Please 
 
 ## License
 
-All rights reserved. The content and design of this website are proprietary and not licensed for reuse without explicit permission. 
+All rights reserved. This code is provided for reference only.
