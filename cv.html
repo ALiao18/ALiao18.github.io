@@ -20,9 +20,9 @@
       <a href="blog/index.html">Blog</a>
       <a href="notes/index.html">Notes</a>
       <a href="videos.html">Videos</a>
-      <a href="mailto:yl8520@nyu.edu"><img src="assets/gmail.svg" alt="Email" class="icon" /></a>
-      <a href="https://github.com/ALiao18" target="_blank" rel="noopener noreferrer"><img src="assets/github.svg" alt="GitHub" class="icon" /></a>
-      <a href="https://www.linkedin.com/in/andrew-liao18/" target="_blank" rel="noopener noreferrer"><img src="assets/linkedin.svg" alt="LinkedIn" class="icon" /></a>
+      <a href="mailto:yl8520@nyu.edu"><img src="assets/gmail.black.svg" alt="Email" class="icon" /></a>
+      <a href="https://github.com/ALiao18" target="_blank" rel="noopener noreferrer"><img src="assets/github.black.svg" alt="GitHub" class="icon" /></a>
+      <a href="https://www.linkedin.com/in/andrew-liao18/" target="_blank" rel="noopener noreferrer"><img src="assets/linkedin.black.svg" alt="LinkedIn" class="icon" /></a>
       <button id="toggle-dark" class="icon-button">
         <img id="theme-icon" src="assets/moon.svg" alt="Toggle Theme" />
       </button>
@@ -43,18 +43,33 @@
   <script>
     const toggleBtn = document.getElementById('toggle-dark');
     const icon = document.getElementById('theme-icon');
+    const socialIcons = {
+      gmail: document.querySelector('a[href*="mailto"] img'),
+      github: document.querySelector('a[href*="github"] img'),
+      linkedin: document.querySelector('a[href*="linkedin"] img')
+    };
+
+    function updateIconsForDarkMode(isDark) {
+      // Update social media icons for dark/light mode
+      socialIcons.gmail.src = isDark ? 'assets/gmail.white.svg' : 'assets/gmail.black.svg';
+      socialIcons.github.src = isDark ? 'assets/github.white.svg' : 'assets/github.black.svg';
+      socialIcons.linkedin.src = isDark ? 'assets/linkedin.white.svg' : 'assets/linkedin.black.svg';
+      
+      // Update theme icon
+      icon.src = isDark ? 'assets/sun.svg' : 'assets/moon.svg';
+      icon.alt = isDark ? 'Light Mode' : 'Dark Mode';
+    }
 
     toggleBtn.addEventListener('click', () => {
       const isDark = document.body.classList.toggle('dark');
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      icon.src = isDark ? 'assets/sun.svg' : 'assets/moon.svg';
-      icon.alt = isDark ? 'Light Mode' : 'Dark Mode';
+      updateIconsForDarkMode(isDark);
     });
 
+    // Check for saved theme preference
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
-      icon.src = 'assets/sun.svg';
-      icon.alt = 'Light Mode';
+      updateIconsForDarkMode(true);
     }
   </script>
 </body>
