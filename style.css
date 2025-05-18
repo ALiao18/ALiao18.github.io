@@ -578,6 +578,42 @@ footer {
 }
 
 /* CV Page */
+.cv-header {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 2rem;
+}
+
+.cv-header h1 {
+  margin-bottom: 0;
+  margin-right: 0.5rem;
+}
+
+.cv-pdf-link {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.cv-pdf-link:hover {
+  color: var(--accent-color);
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+
+.cv-note {
+  font-size: 1.1rem;
+  color: var(--text-color-muted);
+  margin-bottom: 2rem;
+}
+
+.dark-mode .cv-pdf-link {
+  color: var(--accent-color);
+}
+
+/* Legacy CV styles below */
 .cv-section {
   margin-bottom: 2.5rem;
 }

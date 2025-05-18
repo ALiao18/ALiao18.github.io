@@ -47,10 +47,11 @@
     "intro": "My academic publications and research papers."
   },
   "cv": {
-    "title": "CV | Andrew Liao",
+    "title": "Curriculum Vitae | Andrew Liao",
     "headingTitle": "Curriculum Vitae",
     "intro": "My education, experience, and skills.",
-    "downloadLabel": "Download PDF"
+    "downloadLabel": "Download PDF",
+    "viewPdf": "Please view my CV using the PDF link above."
   },
   "blog": {
     "title": "Blog | Andrew Liao",

@@ -47,10 +47,11 @@
     "intro": "我的學術發表和研究論文。"
   },
   "cv": {
-    "title": "履歷 | 廖英劭",
+    "title": "個人履歷 | 廖英劭",
     "headingTitle": "個人履歷",
     "intro": "我的教育背景、經驗和技能。",
-    "downloadLabel": "下載PDF"
+    "downloadLabel": "下載PDF",
+    "viewPdf": "請使用上方的PDF連結查看我的履歷。"
   },
   "blog": {
     "title": "部落格 | 廖英劭",
