@@ -50,7 +50,7 @@
   <main class="container">
     <div class="cv-header">
       <h1 data-i18n="cv.headingTitle">Curriculum Vitae</h1>
-      <a href="assets/AndrewLiao_Resume.pdf" target="_blank" rel="noopener noreferrer" class="cv-pdf-link" data-i18n="cv.pdfLabel">(Short CV PDF)</a>
+      <a href="assets/AndrewLiao_Resume.pdf" target="_blank" rel="noopener noreferrer" class="cv-pdf-link">(Short CV PDF)</a>
     </div>
     
     <div class="cv-sections">
@@ -170,6 +170,33 @@
           section.classList.add('ready');
         });
       }, 100);
+      
+      // Handle PDF label for different languages
+      const pdfLink = document.querySelector('.cv-pdf-link');
+      const language = document.documentElement.getAttribute('data-lang');
+      
+      // Store the original text for English
+      const englishText = "(Short CV PDF)";
+      const chineseText = "(簡歷PDF)";
+      
+      // Set the PDF label based on language
+      if (pdfLink) {
+        // Initial setup
+        if (language === 'zh') {
+          pdfLink.textContent = chineseText;
+        } else {
+          pdfLink.textContent = englishText;
+        }
+        
+        // Listen for language changes
+        document.addEventListener('languageChanged', function(e) {
+          if (e.detail.language === 'zh') {
+            pdfLink.textContent = chineseText;
+          } else {
+            pdfLink.textContent = englishText;
+          }
+        });
+      }
     });
   </script>
 </body>
