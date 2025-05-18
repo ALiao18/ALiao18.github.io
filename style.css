@@ -454,15 +454,15 @@ section li {
 .notes-sidebar {
   width: 250px;
   padding: 2rem;
-  border-right: 1px solid rgba(0,0,0,0.1);
-  background-color: #f0f0f0;
+  border-right: 1px solid var(--border-color);
+  background-color: var(--background-color);
 }
 
 .notes-content {
   flex: 1;
   padding: 2rem;
   overflow-y: auto;
-  background-color: #f0f0f0;
+  background-color: var(--background-color);
 }
 
 .notes-sidebar h2 {
@@ -488,12 +488,12 @@ section li {
 }
 
 .notes-sidebar a:hover {
-  background-color: rgba(0,0,0,0.05);
+  background-color: rgba(0, 0, 0, 0.05);
   transform: translateX(5px);
 }
 
 .notes-sidebar a.active {
-  background-color: rgba(0,0,0,0.08);
+  background-color: rgba(0, 0, 0, 0.08);
   font-weight: 500;
 }
 
@@ -553,16 +553,21 @@ section li {
 }
 
 .dark-mode .notes-sidebar {
-  background-color: #121212;
-  border-right: 1px solid rgba(255,255,255,0.1);
+  background-color: var(--background-color);
+  border-right: 1px solid var(--border-color);
 }
 
 .dark-mode .notes-sidebar a:hover {
-  background-color: rgba(255,255,255,0.05);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .dark-mode .notes-sidebar a.active {
-  background-color: rgba(255,255,255,0.08);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark-mode .notes-content {
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 footer {
