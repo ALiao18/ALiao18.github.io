@@ -11,25 +11,37 @@
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-  <header>
-    <div class="container">
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="index.html" class="nav-title">Andrew Liao</a>
+    </div>
+    <div class="nav-right">
+      <a href="projects.html">Projects</a>
+      <a href="publications.html">Publications</a>
+      <a href="cv.html">CV</a>
+      <a href="blog/index.html">Blog</a>
+      <a href="notes/index.html">Notes</a>
+      <a href="videos.html">Videos</a>
+      <a href="mailto:andrew@example.com"><img src="assets/email-icon.svg" alt="Email" class="icon" /></a>
+      <a href="https://github.com/ALiao18"><img src="assets/github-icon.svg" alt="GitHub" class="icon" /></a>
+      <a href="https://linkedin.com/in/YOUR_HANDLE"><img src="assets/linkedin-icon.svg" alt="LinkedIn" class="icon" /></a>
+      <button id="toggle-dark" class="icon-button">
+        <img id="theme-icon" src="assets/moon.svg" alt="Toggle Theme" />
+      </button>
+    </div>
+  </nav>
+
+  <main class="container">
+    <header>
       <img src="assets/headshot.jpg" alt="Andrew Liao" class="headshot" />
       <h1>Andrew Liao</h1>
       <p class="subtitle">CS & DS Undergraduate @ NYU | Aspiring ML Researcher</p>
-      <div class="social-icons">
-        <a href="mailto:andrew@example.com">Email</a>
-        <a href="https://github.com/ALiao18">GitHub</a>
-        <a href="https://twitter.com/YOUR_HANDLE">Twitter</a>
-        <a href="https://linkedin.com/in/YOUR_HANDLE">LinkedIn</a>
-      </div>
-      <button id="toggle-dark">Toggle Dark Mode</button>
-    </div>
-  </header>
+    </header>
 
-  <main>
-    <section id="bio">
+    <section id="intro">
       <h2>About Me</h2>
       <p>
         I'm Andrew, a senior at NYU studying Computer Science and Data Science. My academic interests lie in reinforcement learning, explainable AI, and physics-informed machine learning. I'm currently involved in research with the GRAIL and CN3 Labs, working on world models and seizure prediction.
@@ -44,36 +56,6 @@
         <li>[Feb 2025] Published a paper on febrile seizure prediction!</li>
       </ul>
     </section>
-
-    <section id="projects">
-      <h2>Projects</h2>
-      <p>Coming soon.</p>
-    </section>
-
-    <section id="publications">
-      <h2>Publications</h2>
-      <p>Coming soon.</p>
-    </section>
-
-    <section id="cv">
-      <h2>CV</h2>
-      <a href="assets/AndrewLiao_Resume.pdf" download>Download My CV (PDF)</a>
-    </section>
-
-    <section id="blog">
-      <h2>Blog</h2>
-      <p>This is where I’ll write about anything that comes to mind — research, thoughts, or side projects. For now, here’s a sample post:</p>
-      <article>
-        <h3>Sample Blog Post</h3>
-        <p><em>Date: 2025-05-18</em></p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Write something cool here.</p>
-      </article>
-    </section>
-
-    <section id="videos">
-      <h2>Videos</h2>
-      <p>Coming soon.</p>
-    </section>
   </main>
 
   <footer>
@@ -82,16 +64,20 @@
 
   <script>
     const toggleBtn = document.getElementById('toggle-dark');
+    const icon = document.getElementById('theme-icon');
+
     toggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+      const isDark = document.body.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      icon.src = isDark ? 'assets/sun.svg' : 'assets/moon.svg';
+      icon.alt = isDark ? 'Light Mode' : 'Dark Mode';
     });
 
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
+      icon.src = 'assets/sun.svg';
+      icon.alt = 'Light Mode';
     }
   </script>
-
-  <!-- Example Math: \(E=mc^2\) will be rendered automatically -->
 </body>
 </html>
