@@ -3,28 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="../style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <title>Blog | Andrew Liao</title>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
-  <title>Blog | Andrew Liao</title>
 </head>
 <body>
-  <!-- Paste your nav bar here -->
+  <!-- Include your site-wide navbar here -->
 
-  <main class="container">
-    <h1>Blog</h1>
-    <div id="content">Loading blog post...</div>
-  </main>
+  <div class="notes-layout">
+    <aside class="notes-sidebar">
+      <h2>Blog Posts</h2>
+      <ul id="blog-toc">
+        <li><a href="#" onclick="loadPost('2025-05-marathon-training.md', this)">Marathon Training</a></li>
+        <li><a href="#" onclick="loadPost('2025-04-world-models.md', this)">World Models</a></li>
+        <li><a href="#" onclick="loadPost('2025-03-rl-interpretability.md', this)">RL Interpretability</a></li>
+      </ul>
+    </aside>
+
+    <main class="notes-content">
+      <div id="post-container">Select a blog post from the left.</div>
+    </main>
+  </div>
 
   <script>
-    fetch("post1.md")
-      .then(res => res.text())
-      .then(text => {
-        const html = marked.parse(text);
-        document.getElementById("content").innerHTML = html;
-        renderMathInElement(document.getElementById("content"));
-      });
+    function loadPost(filename, linkElement) {
+      fetch(filename)
+        .then(res => res.text())
+        .then(text => {
+          const html = marked.parse(text);
+          const container = document.getElementById("post-container");
+          container.innerHTML = html;
+          renderMathInElement(container);
+
+          // Highlight active link
+          document.querySelectorAll('#blog-toc a').forEach(el => el.classList.remove('active'));
+          linkElement.classList.add('active');
+        });
+    }
   </script>
 </body>
 </html>

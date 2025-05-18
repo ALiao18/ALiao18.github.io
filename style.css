@@ -94,4 +94,50 @@ body {
     padding: 2rem 0;
     color: #888;
   }
+  .notes-layout {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  .notes-sidebar {
+    width: 250px;
+    padding: 2rem 1rem;
+    background: #f9f9f9;
+    border-right: 1px solid #ddd;
+    font-size: 0.9rem;
+  }
+  
+  .notes-sidebar h2, .notes-sidebar h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 1rem 0 0.5rem;
+  }
+  
+  .notes-sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .notes-sidebar li {
+    margin: 0.3rem 0;
+  }
+  
+  .notes-sidebar a {
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .notes-sidebar a:hover {
+    text-decoration: underline;
+  }
+  
+  .notes-content {
+    flex-grow: 1;
+    padding: 2rem;
+    overflow-y: auto;
+  }
+  
+  .notes-content h1, h2, h3 {
+    font-weight: 600;
+  }
   
