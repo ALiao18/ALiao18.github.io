@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Andrew Liao's personal academic website." />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="favicon.ico" />
+  <title>Andrew Liao</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <img src="assets/headshot.jpg" alt="Andrew Liao" class="headshot" />
+      <h1>Andrew Liao</h1>
+      <p class="subtitle">CS & DS Undergraduate @ NYU | Aspiring ML Researcher</p>
+      <div class="social-icons">
+        <a href="mailto:andrew@example.com">Email</a>
+        <a href="https://github.com/ALiao18">GitHub</a>
+        <a href="https://twitter.com/YOUR_HANDLE">Twitter</a>
+        <a href="https://linkedin.com/in/YOUR_HANDLE">LinkedIn</a>
+      </div>
+      <button id="toggle-dark">Toggle Dark Mode</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="bio">
+      <h2>About Me</h2>
+      <p>
+        I'm Andrew, a senior at NYU studying Computer Science and Data Science. My academic interests lie in reinforcement learning, explainable AI, and physics-informed machine learning. I'm currently involved in research with the GRAIL and CN3 Labs, working on world models and seizure prediction.
+      </p>
+    </section>
+
+    <section id="news">
+      <h2>Recent News</h2>
+      <ul>
+        <li>[May 2025] Signed up for the NYC Marathon — training begins!</li>
+        <li>[Apr 2025] Working on a paper combining RL and GNNs.</li>
+        <li>[Feb 2025] Published a paper on febrile seizure prediction!</li>
+      </ul>
+    </section>
+
+    <section id="projects">
+      <h2>Projects</h2>
+      <p>Coming soon.</p>
+    </section>
+
+    <section id="publications">
+      <h2>Publications</h2>
+      <p>Coming soon.</p>
+    </section>
+
+    <section id="cv">
+      <h2>CV</h2>
+      <a href="assets/AndrewLiao_Resume.pdf" download>Download My CV (PDF)</a>
+    </section>
+
+    <section id="blog">
+      <h2>Blog</h2>
+      <p>This is where I’ll write about anything that comes to mind — research, thoughts, or side projects. For now, here’s a sample post:</p>
+      <article>
+        <h3>Sample Blog Post</h3>
+        <p><em>Date: 2025-05-18</em></p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Write something cool here.</p>
+      </article>
+    </section>
+
+    <section id="videos">
+      <h2>Videos</h2>
+      <p>Coming soon.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Andrew Liao</p>
+  </footer>
+
+  <script>
+    const toggleBtn = document.getElementById('toggle-dark');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+
+  <!-- Example Math: \(E=mc^2\) will be rendered automatically -->
+</body>
+</html>
