@@ -3,15 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet" />
+  <meta name="description" content="Andrew Liao's blog on machine learning and research." />
   <link rel="stylesheet" href="../style.css" />
+  <link rel="icon" href="../favicon.ico" />
   <title>Blog | Andrew Liao</title>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
 </head>
 <body>
-  <!-- Include your site-wide navbar here -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="../index.html" class="nav-title">Andrew Liao</a>
+    </div>
+    <div class="nav-right">
+      <a href="../projects.html">Projects</a>
+      <a href="../publications.html">Publications</a>
+      <a href="../cv.html">CV</a>
+      <a href="../blog/index.html">Blog</a>
+      <a href="../notes/index.html">Notes</a>
+      <a href="../videos.html">Videos</a>
+      <a href="mailto:yl8520@nyu.edu"><img src="../assets/gmail.svg" alt="Email" class="icon" /></a>
+      <a href="https://github.com/ALiao18" target="_blank" rel="noopener noreferrer"><img src="../assets/github.svg" alt="GitHub" class="icon" /></a>
+      <a href="https://www.linkedin.com/in/andrew-liao18/" target="_blank" rel="noopener noreferrer"><img src="../assets/linkedin.svg" alt="LinkedIn" class="icon" /></a>
+      <button id="toggle-dark" class="icon-button">
+        <img id="theme-icon" src="../assets/moon.svg" alt="Toggle Theme" />
+      </button>
+    </div>
+  </nav>
+  <hr class="nav-divider">
 
   <div class="notes-layout">
     <aside class="notes-sidebar">
@@ -28,6 +48,10 @@
     </main>
   </div>
 
+  <footer>
+    <p>&copy; 2025 Andrew Liao</p>
+  </footer>
+
   <script>
     function loadPost(filename, linkElement) {
       fetch(filename)
@@ -42,6 +66,23 @@
           document.querySelectorAll('#blog-toc a').forEach(el => el.classList.remove('active'));
           linkElement.classList.add('active');
         });
+    }
+
+    // Dark mode functionality
+    const toggleBtn = document.getElementById('toggle-dark');
+    const icon = document.getElementById('theme-icon');
+
+    toggleBtn.addEventListener('click', () => {
+      const isDark = document.body.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      icon.src = isDark ? '../assets/sun.svg' : '../assets/moon.svg';
+      icon.alt = isDark ? 'Light Mode' : 'Dark Mode';
+    });
+
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+      icon.src = '../assets/sun.svg';
+      icon.alt = 'Light Mode';
     }
   </script>
 </body>
