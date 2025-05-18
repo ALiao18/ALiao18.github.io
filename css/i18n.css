@@ -1,0 +1,173 @@
+/**
+ * Internationalization (i18n) styles
+ * CSS for language-specific styling and layout adjustments
+ */
+
+/* General multilingual adjustments */
+[data-lang="zh"] {
+  /* Font families more suitable for Traditional Chinese */
+  --font-sans: "Noto Sans TC", "Microsoft JhengHei", "微軟正黑體", sans-serif;
+  --font-mono: "Noto Sans Mono CJK TC", monospace;
+}
+
+/* Language-specific typography */
+[data-lang="zh"] h1,
+[data-lang="zh"] h2,
+[data-lang="zh"] h3,
+[data-lang="zh"] h4,
+[data-lang="zh"] h5,
+[data-lang="zh"] h6 {
+  font-weight: 700; /* Slightly bolder headings for Chinese */
+  letter-spacing: 0.02em; /* Slightly tighter letter spacing for Chinese */
+}
+
+[data-lang="zh"] p,
+[data-lang="zh"] li,
+[data-lang="zh"] blockquote {
+  line-height: 1.7; /* Increased line height for better readability with Chinese characters */
+  letter-spacing: 0.01em;
+}
+
+/* Language selector styling */
+.language-selector {
+  position: relative;
+  display: inline-block;
+  margin-left: 1rem;
+  z-index: 100;
+}
+
+.language-selector select {
+  appearance: none;
+  background-color: transparent;
+  border: 1px solid var(--text-color-muted);
+  border-radius: 4px;
+  padding: 0.3rem 1.5rem 0.3rem 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: var(--text-color);
+  background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.3rem top 50%;
+  background-size: 1rem auto;
+}
+
+.language-selector select:hover,
+.language-selector select:focus {
+  border-color: var(--accent-color);
+}
+
+/* Dark mode adjustments for language selector */
+.dark-mode .language-selector select {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='lightgray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+}
+
+/* Language icon */
+.language-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  margin-right: 0.3em;
+}
+
+/* Animations for language transition */
+.fade-transition {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.fade-out {
+  opacity: 0;
+}
+
+.fade-in {
+  opacity: 1;
+}
+
+/* Chinese name styling */
+.chinese-name {
+  font-family: var(--font-sans);
+  font-weight: 500;
+}
+
+/* Responsive adjustments for language selector */
+@media (max-width: 768px) {
+  .language-selector {
+    margin: 0.5rem 0;
+  }
+  
+  .language-selector select {
+    padding: 0.4rem 1.5rem 0.4rem 0.5rem;
+    font-size: 1rem; /* Larger touch target on mobile */
+  }
+}
+
+/* General language attribute styling */
+[lang="zh-Hans"],
+[lang="zh-Hant"],
+[lang="zh"] {
+  font-family: 'Noto Sans SC', 'Work Sans', sans-serif;
+}
+
+/* Root language-specific styling */
+:root[data-lang="zh"] {
+  --font-family-heading: 'Noto Sans SC', 'Space Mono', monospace;
+  --font-family-body: 'Noto Sans SC', 'Work Sans', sans-serif;
+}
+
+/* Chinese-specific adjustments for better readability */
+:root[data-lang="zh"] h1,
+:root[data-lang="zh"] h2,
+:root[data-lang="zh"] h3,
+:root[data-lang="zh"] h4,
+:root[data-lang="zh"] h5,
+:root[data-lang="zh"] h6 {
+  line-height: 1.5;
+  letter-spacing: 0.05em;
+}
+
+:root[data-lang="zh"] p,
+:root[data-lang="zh"] li {
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+}
+
+/* Adjustments for specific elements when in Chinese */
+:root[data-lang="zh"] .nav-title {
+  font-size: 1.3rem; /* Slightly smaller for Chinese characters */
+}
+
+:root[data-lang="zh"] .subtitle {
+  line-height: 2; /* More spacing for Chinese subtitle */
+}
+
+/* RTL language support (for future use) */
+[dir="rtl"] .navbar .nav-right {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .navbar a {
+  margin-right: 0;
+  margin-left: 1.8rem;
+}
+
+[dir="rtl"] .navbar a:last-child {
+  margin-left: 0;
+}
+
+/* Animation control for users with reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Pre-loading state */
+.i18n-loading {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+ 

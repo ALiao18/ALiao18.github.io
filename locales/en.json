@@ -1,0 +1,141 @@
+{
+  "meta": {
+    "language": "English",
+    "nativeName": "English",
+    "dir": "ltr"
+  },
+  "common": {
+    "title": "Andrew Liao",
+    "nav": {
+      "home": "Home",
+      "projects": "Projects",
+      "publications": "Publications",
+      "cv": "CV",
+      "blog": "Blog",
+      "notes": "Notes",
+      "videos": "Videos",
+      "contact": "Contact",
+      "language": "Language",
+      "mode": {
+        "dark": "Dark Mode",
+        "light": "Light Mode"
+      }
+    },
+    "footer": {
+      "copyright": "© 2025 Andrew Liao"
+    }
+  },
+  "home": {
+    "title": "Andrew Liao | Personal Website",
+    "intro": {
+      "headerTitle": "Andrew Liao",
+      "subtitle": "CS & DS Undergraduate @ NYU | Aspiring ML Researcher",
+      "aboutTitle": "About Me",
+      "aboutContent": "I'm Andrew, a senior at NYU studying Computer Science and Data Science. My academic interests lie in reinforcement learning, explainable AI, and physics-informed machine learning. I'm currently involved in research with the GRAIL and CN3 Labs, working on world models and seizure prediction.",
+      "newsTitle": "Recent News",
+      "newsContent": "Coming soon..."
+    }
+  },
+  "projects": {
+    "title": "Projects | Andrew Liao",
+    "headingTitle": "Projects",
+    "intro": "Here are some of the projects I've worked on."
+  },
+  "publications": {
+    "title": "Publications | Andrew Liao",
+    "headingTitle": "Publications",
+    "intro": "My academic publications and research papers."
+  },
+  "cv": {
+    "title": "CV | Andrew Liao",
+    "headingTitle": "Curriculum Vitae",
+    "intro": "My education, experience, and skills.",
+    "downloadLabel": "Download PDF"
+  },
+  "blog": {
+    "title": "Blog | Andrew Liao",
+    "headingTitle": "Blog Posts",
+    "intro": "My thoughts and experiences on topics related to computer science, data science, and machine learning.",
+    "welcomeTitle": "Welcome to My Blog",
+    "welcomeContent": "This is where I share my thoughts and experiences on topics related to computer science, data science, and machine learning.",
+    "comingSoon": "Blog posts will be added soon. Please check back later!"
+  },
+  "notes": {
+    "title": "Notes | Andrew Liao",
+    "headingTitle": "Notes",
+    "intro": "Academic notes, tutorials, and guides.",
+    "welcomeTitle": "Welcome to My Notes",
+    "welcomeContent": "Here I share academic notes, tutorials, and guides on various topics in computer science and data science.",
+    "comingSoon": "Notes will be added soon. Please check back later!"
+  },
+  "videos": {
+    "title": "Videos | Andrew Liao",
+    "headingTitle": "Videos",
+    "intro": "Video content including tutorials, talks, and presentations.",
+    "comingSoon": "Videos coming soon!"
+  },
+  "welcome": {
+    "title": "Welcome to Andrew Liao's Website",
+    "subtitle": "Please select how you'd like to continue",
+    "recruiter": {
+      "title": "Recruiter",
+      "description": "Exploring opportunities for collaboration and hiring"
+    },
+    "academic": {
+      "title": "Academic",
+      "description": "Professors, researchers, and academic collaborators"
+    },
+    "personal": {
+      "title": "Friends & Family",
+      "description": "Personal connections and friends"
+    },
+    "directAccess": "Or <a href=\"index.html\">continue to the main site</a> without customization",
+    "password": {
+      "title": "Enter Password",
+      "description": "This section is password protected for friends and family.",
+      "placeholder": "Password",
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "error": "Incorrect password. Please try again."
+    }
+  },
+  "recruiter": {
+    "highlight": {
+      "title": "Skills Highlight"
+    },
+    "skills": {
+      "languages": "Programming Languages",
+      "frameworks": "Frameworks & Libraries"
+    }
+  },
+  "academic": {
+    "highlight": {
+      "title": "Research Interests",
+      "description": "My current research focuses on reinforcement learning, explainable AI, and physics-informed machine learning. I'm particularly interested in developing robust world models and their applications in healthcare."
+    },
+    "research": {
+      "area1": {
+        "title": "Reinforcement Learning",
+        "description": "Working on sample-efficient and robust RL algorithms for real-world applications."
+      },
+      "area2": {
+        "title": "Explainable AI",
+        "description": "Developing techniques to make deep learning models more transparent and interpretable."
+      }
+    }
+  },
+  "personal": {
+    "highlight": {
+      "title": "Personal Updates",
+      "description": "Hey friends! Thanks for stopping by my website. Here are some recent personal updates:"
+    },
+    "update1": {
+      "title": "Recent Trip",
+      "description": "Photos from my recent trip to Taiwan. Visited family and explored some beautiful places."
+    },
+    "private": {
+      "title": "Private Content",
+      "description": "This section is only visible to friends and family with the password."
+    }
+  }
+} 

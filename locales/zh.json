@@ -1,0 +1,141 @@
+{
+  "meta": {
+    "language": "Chinese",
+    "nativeName": "繁體中文",
+    "dir": "ltr"
+  },
+  "common": {
+    "title": "廖英劭",
+    "nav": {
+      "home": "首頁",
+      "projects": "專案",
+      "publications": "發表論文",
+      "cv": "履歷",
+      "blog": "部落格",
+      "notes": "筆記",
+      "videos": "影片",
+      "contact": "聯絡方式",
+      "language": "語言",
+      "mode": {
+        "dark": "深色模式",
+        "light": "淺色模式"
+      }
+    },
+    "footer": {
+      "copyright": "© 2025 廖英劭"
+    }
+  },
+  "home": {
+    "title": "廖英劭 | 個人網站",
+    "intro": {
+      "headerTitle": "廖英劭",
+      "subtitle": "紐約大學電腦科學與資料科學本科生 | 機器學習研究者",
+      "aboutTitle": "關於我",
+      "aboutContent": "我是廖英劭，紐約大學電腦科學與資料科學專業的大四學生。我的學術興趣在於強化學習、可解釋人工智慧和物理資訊機器學習。目前，我正在GRAIL和CN3實驗室進行研究，研究內容包括世界模型和癲癇預測。",
+      "newsTitle": "最新消息",
+      "newsContent": "即將推出..."
+    }
+  },
+  "projects": {
+    "title": "專案 | 廖英劭",
+    "headingTitle": "專案",
+    "intro": "以下是我參與的一些專案。"
+  },
+  "publications": {
+    "title": "發表論文 | 廖英劭",
+    "headingTitle": "發表論文",
+    "intro": "我的學術發表和研究論文。"
+  },
+  "cv": {
+    "title": "履歷 | 廖英劭",
+    "headingTitle": "個人履歷",
+    "intro": "我的教育背景、經驗和技能。",
+    "downloadLabel": "下載PDF"
+  },
+  "blog": {
+    "title": "部落格 | 廖英劭",
+    "headingTitle": "部落格文章",
+    "intro": "我關於電腦科學、資料科學和機器學習的一些想法和經驗。",
+    "welcomeTitle": "歡迎訪問我的部落格",
+    "welcomeContent": "在這裡，我分享關於電腦科學、資料科學和機器學習的想法和經驗。",
+    "comingSoon": "部落格文章即將新增，請稍後再來查看！"
+  },
+  "notes": {
+    "title": "筆記 | 廖英劭",
+    "headingTitle": "學術筆記",
+    "intro": "學術筆記、教學和指南。",
+    "welcomeTitle": "歡迎訪問我的筆記",
+    "welcomeContent": "在這裡，我分享電腦科學和資料科學各方面的學術筆記、教學和指南。",
+    "comingSoon": "筆記即將新增，請稍後再來查看！"
+  },
+  "videos": {
+    "title": "影片 | 廖英劭",
+    "headingTitle": "影片",
+    "intro": "影片內容包括教學、演講和示範。",
+    "comingSoon": "影片即將上線！"
+  },
+  "welcome": {
+    "title": "歡迎來到廖英劭的網站",
+    "subtitle": "請選擇您想要如何繼續",
+    "recruiter": {
+      "title": "招聘者",
+      "description": "探索合作和招聘機會"
+    },
+    "academic": {
+      "title": "學術人士",
+      "description": "教授、研究人員和學術合作夥伴"
+    },
+    "personal": {
+      "title": "朋友與家人",
+      "description": "個人關係和朋友"
+    },
+    "directAccess": "或<a href=\"index.html\">不進行定製直接繼續訪問主站</a>",
+    "password": {
+      "title": "輸入密碼",
+      "description": "此部分為朋友和家人設置了密碼保護。",
+      "placeholder": "密碼",
+      "submit": "提交",
+      "cancel": "取消",
+      "error": "密碼不正確，請重試。"
+    }
+  },
+  "recruiter": {
+    "highlight": {
+      "title": "技能亮點"
+    },
+    "skills": {
+      "languages": "程式語言",
+      "frameworks": "框架與函式庫"
+    }
+  },
+  "academic": {
+    "highlight": {
+      "title": "研究興趣",
+      "description": "我目前的研究重點是強化學習、可解釋人工智慧和物理資訊機器學習。我特別對開發穩健的世界模型及其在醫療保健中的應用感興趣。"
+    },
+    "research": {
+      "area1": {
+        "title": "強化學習",
+        "description": "致力於開發樣本高效且穩健的強化學習演算法，用於現實世界應用。"
+      },
+      "area2": {
+        "title": "可解釋人工智慧",
+        "description": "開發使深度學習模型更透明、更可解釋的技術。"
+      }
+    }
+  },
+  "personal": {
+    "highlight": {
+      "title": "個人近況",
+      "description": "嗨，朋友們！感謝你們訪問我的網站。以下是我的一些近期動態："
+    },
+    "update1": {
+      "title": "最近的旅行",
+      "description": "我最近去台灣旅行的照片。拜訪了家人，探索了一些美麗的地方。"
+    },
+    "private": {
+      "title": "私人內容",
+      "description": "此部分僅對擁有密碼的朋友和家人可見。"
+    }
+  }
+} 

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Welcome to Andrew Liao's personal website">
+  <title>Welcome | Andrew Liao</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/i18n.css">
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+  <script src="js/i18n.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #6e8efb, #a777e3);
+      --card-height: 300px;
+      --card-width: 250px;
+    }
+    
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      margin: 0;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    .welcome-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .welcome-header {
+      margin-bottom: 2rem;
+    }
+    
+    .welcome-title {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .welcome-subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: var(--text-color-muted);
+    }
+    
+    .user-type-selection {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .user-card {
+      width: var(--card-width);
+      height: var(--card-height);
+      perspective: 1000px;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      box-shadow: 0 4px 20px var(--shadow-color);
+      border-radius: 12px;
+    }
+    
+    .user-card:hover .card-inner {
+      transform: translateY(-10px);
+    }
+    
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+      box-sizing: border-box;
+      background-color: var(--card-background);
+    }
+    
+    .card-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .card-title {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
+    
+    .card-description {
+      font-size: 0.9rem;
+      color: var(--text-color-muted);
+      text-align: center;
+    }
+    
+    .language-selector-container {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+    
+    .theme-toggle-container {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+    }
+    
+    /* Password modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background-color: var(--card-background);
+      border-radius: 12px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+    
+    .password-input {
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      margin: 1rem 0;
+      box-sizing: border-box;
+      background-color: var(--background-color);
+      color: var(--text-color);
+    }
+    
+    .password-submit,
+    .modal-close {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-family: var(--font-body);
+      margin-top: 1rem;
+      transition: all 0.2s ease;
+    }
+    
+    .password-submit {
+      background-color: var(--accent-color);
+      color: white;
+    }
+    
+    .password-submit:hover {
+      opacity: 0.9;
+    }
+    
+    .modal-close {
+      background-color: transparent;
+      color: var(--text-color-muted);
+      margin-left: 0.5rem;
+    }
+    
+    .modal-close:hover {
+      color: var(--text-color);
+    }
+    
+    .password-error {
+      color: #e53935;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+    
+    /* Loading animation */
+    .loader {
+      display: none;
+      border: 3px solid var(--background-color);
+      border-top: 3px solid var(--accent-color);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 768px) {
+      .welcome-title {
+        font-size: 2rem;
+      }
+      
+      .user-type-selection {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .user-card {
+        width: 100%;
+        max-width: 350px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="theme-toggle-container">
+    <button id="toggle-dark" aria-label="Toggle dark mode">
+      <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+    </button>
+  </div>
+  
+  <div class="language-selector-container">
+    <div class="language-selector" id="language-selector" aria-label="Select language"></div>
+  </div>
+  
+  <div class="welcome-container">
+    <div class="welcome-header">
+      <h1 class="welcome-title" data-i18n="welcome.title">Welcome to Andrew Liao's Website</h1>
+      <p class="welcome-subtitle" data-i18n="welcome.subtitle">Please select how you'd like to continue</p>
+    </div>
+    
+    <div class="user-type-selection">
+      <div class="user-card" id="recruiter-card">
+        <div class="card-inner">
+          <div class="card-face">
+            <div class="card-icon">💼</div>
+            <h3 class="card-title" data-i18n="welcome.recruiter.title">Recruiter</h3>
+            <p class="card-description" data-i18n="welcome.recruiter.description">Exploring opportunities for collaboration and hiring</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="user-card" id="academic-card">
+        <div class="card-inner">
+          <div class="card-face">
+            <div class="card-icon">🎓</div>
+            <h3 class="card-title" data-i18n="welcome.academic.title">Academic</h3>
+            <p class="card-description" data-i18n="welcome.academic.description">Professors, researchers, and academic collaborators</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="user-card" id="personal-card">
+        <div class="card-inner">
+          <div class="card-face">
+            <div class="card-icon">👋</div>
+            <h3 class="card-title" data-i18n="welcome.personal.title">Friends & Family</h3>
+            <p class="card-description" data-i18n="welcome.personal.description">Personal connections and friends</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="welcome-footer">
+      <p data-i18n="welcome.directAccess">Or <a href="index.html">continue to the main site</a> without customization</p>
+    </div>
+  </div>
+  
+  <!-- Password Modal -->
+  <div id="password-modal" class="modal">
+    <div class="modal-content">
+      <h2 data-i18n="welcome.password.title">Enter Password</h2>
+      <p data-i18n="welcome.password.description">This section is password protected for friends and family.</p>
+      <input type="password" id="password-input" class="password-input" placeholder="Password" data-i18n-attr="placeholder:welcome.password.placeholder">
+      <div class="loader" id="password-loader"></div>
+      <p id="password-error" class="password-error" data-i18n="welcome.password.error">Incorrect password. Please try again.</p>
+      <div>
+        <button id="submit-password" class="password-submit" data-i18n="welcome.password.submit">Submit</button>
+        <button id="close-modal" class="modal-close" data-i18n="welcome.password.cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Dark mode toggle
+    const toggleBtn = document.getElementById('toggle-dark');
+    const icon = document.getElementById('theme-icon');
+    
+    // Check for stored preference or system preference
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    const storedTheme = localStorage.getItem('theme');
+    
+    if (storedTheme === 'dark' || (!storedTheme && prefersDarkScheme.matches)) {
+      document.body.classList.add('dark-mode');
+      updateIcon(true);
+    } else {
+      document.body.classList.remove('dark-mode');
+      updateIcon(false);
+    }
+    
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      const isDarkMode = document.body.classList.contains('dark-mode');
+      localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+      updateIcon(isDarkMode);
+    });
+    
+    function updateIcon(isDark) {
+      // Update theme icon
+      if (isDark) {
+        icon.innerHTML = `
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"></path>
+        `;
+      } else {
+        icon.innerHTML = `
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        `;
+      }
+    }
+    
+    // User type selection
+    document.getElementById('recruiter-card').addEventListener('click', function() {
+      localStorage.setItem('user_type', 'recruiter');
+      window.location.href = 'index.html?user=recruiter';
+    });
+    
+    document.getElementById('academic-card').addEventListener('click', function() {
+      localStorage.setItem('user_type', 'academic');
+      window.location.href = 'index.html?user=academic';
+    });
+    
+    document.getElementById('personal-card').addEventListener('click', function() {
+      const modal = document.getElementById('password-modal');
+      modal.style.display = 'flex';
+    });
+    
+    // Password modal
+    document.getElementById('close-modal').addEventListener('click', function() {
+      document.getElementById('password-modal').style.display = 'none';
+      document.getElementById('password-input').value = '';
+      document.getElementById('password-error').style.display = 'none';
+    });
+    
+    document.getElementById('submit-password').addEventListener('click', validatePassword);
+    document.getElementById('password-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        validatePassword();
+      }
+    });
+    
+    function validatePassword() {
+      const passwordInput = document.getElementById('password-input');
+      const passwordLoader = document.getElementById('password-loader');
+      const passwordError = document.getElementById('password-error');
+      
+      // Show loader, hide error
+      passwordLoader.style.display = 'block';
+      passwordError.style.display = 'none';
+      
+      // Simple timeout to simulate checking
+      setTimeout(() => {
+        // The password hash (using SHA-256)
+        // Default password: "friends&family"
+        const correctPasswordHash = "8c97815c5c04301d9b69d65c3315ed1edd0f29421c08da253e96e2be89b81a94";
+        
+        // Get input and hash it
+        const password = passwordInput.value.trim();
+        const hashedPassword = CryptoJS.SHA256(password).toString();
+        
+        passwordLoader.style.display = 'none';
+        
+        if (hashedPassword === correctPasswordHash) {
+          // Password correct
+          localStorage.setItem('user_type', 'personal');
+          localStorage.setItem('auth_token', hashedPassword); // Simple auth token
+          window.location.href = 'index.html?user=personal';
+        } else {
+          // Password incorrect
+          passwordError.style.display = 'block';
+          passwordInput.value = '';
+          passwordInput.focus();
+        }
+      }, 800);
+    }
+    
+    // Add translations for the welcome page to locales
+    const welcomeEN = {
+      "welcome": {
+        "title": "Welcome to Andrew Liao's Website",
+        "subtitle": "Please select how you'd like to continue",
+        "recruiter": {
+          "title": "Recruiter",
+          "description": "Exploring opportunities for collaboration and hiring"
+        },
+        "academic": {
+          "title": "Academic",
+          "description": "Professors, researchers, and academic collaborators"
+        },
+        "personal": {
+          "title": "Friends & Family",
+          "description": "Personal connections and friends"
+        },
+        "directAccess": "Or continue to the main site without customization",
+        "password": {
+          "title": "Enter Password",
+          "description": "This section is password protected for friends and family.",
+          "placeholder": "Password",
+          "submit": "Submit",
+          "cancel": "Cancel",
+          "error": "Incorrect password. Please try again."
+        }
+      }
+    };
+    
+    const welcomeZH = {
+      "welcome": {
+        "title": "歡迎來到廖英劭的網站",
+        "subtitle": "請選擇您想要如何繼續",
+        "recruiter": {
+          "title": "招聘者",
+          "description": "探索合作和招聘機會"
+        },
+        "academic": {
+          "title": "學術人士",
+          "description": "教授、研究人員和學術合作夥伴"
+        },
+        "personal": {
+          "title": "朋友與家人",
+          "description": "個人關係和朋友"
+        },
+        "directAccess": "或不進行定製直接繼續訪問主站",
+        "password": {
+          "title": "輸入密碼",
+          "description": "此部分為朋友和家人設置了密碼保護。",
+          "placeholder": "密碼",
+          "submit": "提交",
+          "cancel": "取消",
+          "error": "密碼不正確，請重試。"
+        }
+      }
+    };
+    
+    // Add these to the i18n system once it's loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.i18n && window.i18n.addTranslations) {
+        window.i18n.addTranslations('en', welcomeEN);
+        window.i18n.addTranslations('zh', welcomeZH);
+      }
+    });
+  </script>
+</body>
+</html> 
