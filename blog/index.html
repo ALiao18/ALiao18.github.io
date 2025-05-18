@@ -36,15 +36,16 @@
   <div class="notes-layout">
     <aside class="notes-sidebar">
       <h2>Blog Posts</h2>
-      <ul id="blog-toc">
-        <li><a href="#" onclick="loadPost('2025-05-marathon-training.md', this)">Marathon Training</a></li>
-        <li><a href="#" onclick="loadPost('2025-04-world-models.md', this)">World Models</a></li>
-        <li><a href="#" onclick="loadPost('2025-03-rl-interpretability.md', this)">RL Interpretability</a></li>
-      </ul>
+      <p style="padding: 0.5rem; font-size: 0.9rem;">Coming soon...</p>
+      <!-- Blog entries will be added here -->
     </aside>
 
     <main class="notes-content">
-      <div id="post-container">Select a blog post from the left.</div>
+      <div id="post-container">
+        <h2>Welcome to My Blog</h2>
+        <p>This is where I share my thoughts and experiences on topics related to computer science, data science, and machine learning.</p>
+        <p>Blog posts will be added soon. Please check back later!</p>
+      </div>
     </main>
   </div>
 
@@ -53,18 +54,43 @@
   </footer>
 
   <script>
+    // Function to load blog posts (will be used when posts are added)
     function loadPost(filename, linkElement) {
-      fetch(filename)
-        .then(res => res.text())
-        .then(text => {
-          const html = marked.parse(text);
+      // Remove '.md' and replace with '.json' for storing post content
+      const jsonFile = filename.replace('.md', '.json');
+      
+      fetch(jsonFile)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Post not found');
+          }
+          return response.json();
+        })
+        .then(data => {
           const container = document.getElementById("post-container");
-          container.innerHTML = html;
-          renderMathInElement(container);
-
+          container.innerHTML = `
+            <h2>${data.title}</h2>
+            <div class="post-metadata">
+              <span>Published: ${data.date}</span>
+              ${data.tags ? `<span class="post-tags">Tags: ${data.tags.join(', ')}</span>` : ''}
+            </div>
+            <div class="post-content">
+              ${marked.parse(data.content)}
+            </div>
+          `;
+          
+          // Render any math content
+          if (window.renderMathInElement) {
+            renderMathInElement(container);
+          }
+          
           // Highlight active link
           document.querySelectorAll('#blog-toc a').forEach(el => el.classList.remove('active'));
           linkElement.classList.add('active');
+        })
+        .catch(error => {
+          console.error('Error loading post:', error);
+          document.getElementById("post-container").innerHTML = `<p>Error loading post. Please try again later.</p>`;
         });
     }
 
