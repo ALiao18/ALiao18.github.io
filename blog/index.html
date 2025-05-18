@@ -12,9 +12,9 @@
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
 </head>
 <body>
-  <nav class="navbar">
+  <nav class="navbar" aria-label="Main navigation">
     <div class="nav-left">
-      <a href="../index.html" class="nav-title">Andrew Liao</a>
+      <a href="../index.html" class="nav-title">Andrew Liao <span class="chinese-name" lang="zh-Hans">廖英劭</span></a>
     </div>
     <div class="nav-right">
       <a href="../projects.html">Projects</a>
@@ -23,10 +23,10 @@
       <a href="../blog/index.html">Blog</a>
       <a href="../notes/index.html">Notes</a>
       <a href="../videos.html">Videos</a>
-      <a href="mailto:yl8520@nyu.edu"><img src="../assets/gmail.svg" alt="Email" class="icon" /></a>
-      <a href="https://github.com/ALiao18" target="_blank" rel="noopener noreferrer"><img src="../assets/github.svg" alt="GitHub" class="icon" /></a>
-      <a href="https://www.linkedin.com/in/andrew-liao18/" target="_blank" rel="noopener noreferrer"><img src="../assets/linkedin.svg" alt="LinkedIn" class="icon" /></a>
-      <button id="toggle-dark" class="icon-button">
+      <a href="mailto:yl8520@nyu.edu" aria-label="Email me"><img src="../assets/gmail.svg" alt="Email" class="icon" /></a>
+      <a href="https://github.com/ALiao18" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile"><img src="../assets/github.svg" alt="GitHub" class="icon" /></a>
+      <a href="https://www.linkedin.com/in/andrew-liao18/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile"><img src="../assets/linkedin.svg" alt="LinkedIn" class="icon" /></a>
+      <button id="toggle-dark" class="icon-button" aria-label="Toggle dark mode">
         <img id="theme-icon" src="../assets/moon.svg" alt="Toggle Theme" />
       </button>
     </div>
@@ -34,7 +34,7 @@
   <hr class="nav-divider">
 
   <div class="notes-layout">
-    <aside class="notes-sidebar">
+    <aside class="notes-sidebar" aria-label="Blog navigation">
       <h2>Blog Posts</h2>
       <p style="padding: 0.5rem; font-size: 0.9rem;">Coming soon...</p>
       <!-- Blog entries will be added here -->
@@ -54,6 +54,21 @@
   </footer>
 
   <script>
+    // Highlight current page in navigation
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentLocation = window.location.pathname;
+      const navLinks = document.querySelectorAll('.navbar a');
+      
+      navLinks.forEach(link => {
+        const linkPath = link.getAttribute('href');
+        if (linkPath === '../blog/index.html' || 
+            (currentLocation.includes('/blog/') && linkPath === '../blog/index.html')) {
+          link.classList.add('active');
+          link.setAttribute('aria-current', 'page');
+        }
+      });
+    });
+
     // Function to load blog posts (will be used when posts are added)
     function loadPost(filename, linkElement) {
       // Remove '.md' and replace with '.json' for storing post content
@@ -85,8 +100,12 @@
           }
           
           // Highlight active link
-          document.querySelectorAll('#blog-toc a').forEach(el => el.classList.remove('active'));
+          document.querySelectorAll('#blog-toc a').forEach(el => {
+            el.classList.remove('active');
+            el.setAttribute('aria-current', 'false');
+          });
           linkElement.classList.add('active');
+          linkElement.setAttribute('aria-current', 'true');
         })
         .catch(error => {
           console.error('Error loading post:', error);
@@ -103,12 +122,14 @@
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
       icon.src = isDark ? '../assets/sun.svg' : '../assets/moon.svg';
       icon.alt = isDark ? 'Light Mode' : 'Dark Mode';
+      toggleBtn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
     });
 
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
       icon.src = '../assets/sun.svg';
       icon.alt = 'Light Mode';
+      toggleBtn.setAttribute('aria-label', 'Switch to light mode');
     }
   </script>
 </body>
