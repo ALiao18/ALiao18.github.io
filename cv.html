@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Andrew Liao's Curriculum Vitae." />
+  <meta name="description" content="Andrew Liao's CV and professional experience." />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="css/i18n.css" />
   <link rel="icon" href="favicon.ico" />
-  <title data-i18n="cv.title">Curriculum Vitae | Andrew Liao</title>
+  <title data-i18n="cv.title">CV | Andrew Liao</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -26,6 +26,142 @@
     img.lazy-loaded, [data-bg-src].lazy-loaded {
       opacity: 1;
     }
+
+    /* Minimal navbar */
+    .navbar {
+      padding: 1rem 2rem;
+      justify-content: space-between;
+    }
+
+    .nav-left {
+      flex: 1;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Mobile menu styles */
+    .mobile-menu {
+      background: var(--bg-color);
+      border-left: 1px solid var(--border-color);
+    }
+
+    .mobile-menu a {
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .mobile-menu .social-links {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .mobile-menu .social-links a {
+      padding: 0.5rem;
+    }
+
+    /* CV specific styles */
+    .cv-section {
+      margin-bottom: 2rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+
+    .cv-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cv-section h2 {
+      margin-bottom: 1rem;
+      color: var(--text-color);
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 0.5rem;
+    }
+
+    .cv-item {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border-radius: 8px;
+      background: var(--bg-color);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .cv-item:hover {
+      transform: translateY(-2px);
+    }
+
+    .cv-item h3 {
+      color: var(--accent-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .cv-item .date {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .cv-item p {
+      margin: 0.5rem 0;
+      line-height: 1.6;
+    }
+
+    .cv-item ul {
+      margin: 0.5rem 0;
+      padding-left: 1.5rem;
+    }
+
+    .cv-item li {
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .skill-category {
+      background: var(--bg-color);
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .skill-category h3 {
+      color: var(--accent-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .skill-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .skill-list li {
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .skill-list li::before {
+      content: "•";
+      color: var(--accent-color);
+    }
   </style>
 </head>
 <body class="fade-transition" data-title-key="cv.title">
@@ -34,16 +170,6 @@
       <a href="index.html" class="nav-title"><span>Andrew Liao</span> <span class="chinese-name" lang="zh-Hant">廖英劭</span></a>
     </div>
     <div class="nav-right">
-      <a href="projects.html" data-i18n="common.nav.projects">Projects</a>
-      <a href="publications.html" data-i18n="common.nav.publications">Publications</a>
-      <a href="cv.html" data-i18n="common.nav.cv">CV</a>
-      <a href="blog/index.html" data-i18n="common.nav.blog">Blog</a>
-      <a href="notes/index.html" data-i18n="common.nav.notes">Notes</a>
-      <a href="videos.html" data-i18n="common.nav.videos">Videos</a>
-      <a href="mailto:yl8520@nyu.edu" aria-label="Email me"><img src="assets/gmail.black.svg" alt="Email" class="icon" /></a>
-      <a href="https://github.com/ALiao18" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile"><img src="assets/github.black.svg" alt="GitHub" class="icon" /></a>
-      <a href="https://www.linkedin.com/in/andrew-liao18/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile"><img src="assets/linkedin.black.svg" alt="LinkedIn" class="icon" /></a>
-      <div class="language-selector" id="language-selector" aria-label="Select language"></div>
       <button id="toggle-dark" aria-label="Toggle dark mode">
         <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"></circle>
@@ -74,58 +200,109 @@
     <a href="blog/index.html" data-i18n="common.nav.blog">Blog</a>
     <a href="notes/index.html" data-i18n="common.nav.notes">Notes</a>
     <a href="videos.html" data-i18n="common.nav.videos">Videos</a>
+    <div class="language-selector" id="language-selector" aria-label="Select language"></div>
+    <div class="social-links">
+      <a href="mailto:yl8520@nyu.edu" aria-label="Email me"><img src="assets/gmail.black.svg" alt="Email" class="icon" /></a>
+      <a href="https://github.com/ALiao18" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile"><img src="assets/github.black.svg" alt="GitHub" class="icon" /></a>
+      <a href="https://www.linkedin.com/in/andrew-liao18/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile"><img src="assets/linkedin.black.svg" alt="LinkedIn" class="icon" /></a>
+    </div>
   </div>
   <hr class="nav-divider">
 
   <main class="container">
-    <section class="cv-header">
+    <section class="cv-section" id="education">
       <div class="content-wrapper">
-        <h1 class="aos aos-fade-up" data-i18n="cv.headingTitle">Curriculum Vitae</h1>
-        <a href="assets/AndrewLiao_Resume.pdf" target="_blank" rel="noopener noreferrer" class="cv-pdf-link aos aos-fade-up delay-100">(Short CV PDF)</a>
+        <h2 data-i18n="cv.education.title">Education</h2>
+        <div class="cv-item">
+          <h3>New York University</h3>
+          <div class="date">2023 - Present</div>
+          <p>Master of Science in Computer Science</p>
+        </div>
+        <div class="cv-item">
+          <h3>National Taiwan University</h3>
+          <div class="date">2019 - 2023</div>
+          <p>Bachelor of Science in Computer Science and Information Engineering</p>
+        </div>
       </div>
     </section>
-    
-    <div class="cv-sections">
-      <!-- Education Section -->
-      <details class="cv-expandable aos aos-fade-up">
-        <summary data-i18n="cv.education.title">Education</summary>
-        <div class="cv-content">
-          <!-- Content will be added later -->
+
+    <section class="cv-section" id="experience">
+      <div class="content-wrapper">
+        <h2 data-i18n="cv.experience.title">Experience</h2>
+        <div class="cv-item">
+          <h3>Software Engineer Intern</h3>
+          <div class="date">Summer 2023</div>
+          <p>Company Name</p>
+          <ul>
+            <li>Developed and maintained web applications using modern frameworks</li>
+            <li>Collaborated with cross-functional teams to deliver high-quality software</li>
+            <li>Implemented new features and fixed bugs in existing codebase</li>
+          </ul>
         </div>
-      </details>
-      
-      <!-- Experience Section -->
-      <details class="cv-expandable aos aos-fade-up delay-100">
-        <summary data-i18n="cv.experience.title">Experience</summary>
-        <div class="cv-content">
-          <!-- Content will be added later -->
+      </div>
+    </section>
+
+    <section class="cv-section" id="skills">
+      <div class="content-wrapper">
+        <h2 data-i18n="cv.skills.title">Skills</h2>
+        <div class="skills-grid">
+          <div class="skill-category">
+            <h3>Programming Languages</h3>
+            <ul class="skill-list">
+              <li>Python</li>
+              <li>JavaScript</li>
+              <li>Java</li>
+              <li>C++</li>
+            </ul>
+          </div>
+          <div class="skill-category">
+            <h3>Web Technologies</h3>
+            <ul class="skill-list">
+              <li>HTML5</li>
+              <li>CSS3</li>
+              <li>React</li>
+              <li>Node.js</li>
+            </ul>
+          </div>
+          <div class="skill-category">
+            <h3>Tools & Frameworks</h3>
+            <ul class="skill-list">
+              <li>Git</li>
+              <li>Docker</li>
+              <li>TensorFlow</li>
+              <li>PyTorch</li>
+            </ul>
+          </div>
         </div>
-      </details>
-      
-      <!-- Skills Section -->
-      <details class="cv-expandable aos aos-fade-up delay-200">
-        <summary data-i18n="cv.skills.title">Skills</summary>
-        <div class="cv-content">
-          <!-- Content will be added later -->
+      </div>
+    </section>
+
+    <section class="cv-section" id="projects">
+      <div class="content-wrapper">
+        <h2 data-i18n="cv.projects.title">Projects</h2>
+        <div class="cv-item">
+          <h3>Project Name</h3>
+          <div class="date">2023</div>
+          <p>A brief description of the project and your role in it.</p>
+          <ul>
+            <li>Key achievement or contribution</li>
+            <li>Technologies used</li>
+            <li>Impact or results</li>
+          </ul>
         </div>
-      </details>
-      
-      <!-- Projects Section -->
-      <details class="cv-expandable aos aos-fade-up delay-300">
-        <summary data-i18n="cv.projects.title">Projects</summary>
-        <div class="cv-content">
-          <!-- Content will be added later -->
+      </div>
+    </section>
+
+    <section class="cv-section" id="awards">
+      <div class="content-wrapper">
+        <h2 data-i18n="cv.awards.title">Awards & Honors</h2>
+        <div class="cv-item">
+          <h3>Award Name</h3>
+          <div class="date">2023</div>
+          <p>Description of the award and its significance.</p>
         </div>
-      </details>
-      
-      <!-- Awards Section -->
-      <details class="cv-expandable aos aos-fade-up delay-400">
-        <summary data-i18n="cv.awards.title">Awards & Honors</summary>
-        <div class="cv-content">
-          <!-- Content will be added later -->
-        </div>
-      </details>
-    </div>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -150,7 +327,7 @@
     }, observerOptions);
 
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('section').forEach(section => {
+      document.querySelectorAll('.cv-section').forEach(section => {
         observer.observe(section);
       });
     });
@@ -261,43 +438,6 @@
         }
       });
     }
-    
-    // Initialize expandable sections
-    document.addEventListener('DOMContentLoaded', function() {
-      // Add animation class after a small delay to allow initial rendering
-      setTimeout(() => {
-        document.querySelectorAll('.cv-expandable').forEach(section => {
-          section.classList.add('ready');
-        });
-      }, 100);
-      
-      // Handle PDF label for different languages
-      const pdfLink = document.querySelector('.cv-pdf-link');
-      const language = document.documentElement.getAttribute('data-lang');
-      
-      // Store the original text for English
-      const englishText = "(Short CV PDF)";
-      const chineseText = "(簡歷PDF)";
-      
-      // Set the PDF label based on language
-      if (pdfLink) {
-        // Initial setup
-        if (language === 'zh') {
-          pdfLink.textContent = chineseText;
-        } else {
-          pdfLink.textContent = englishText;
-        }
-        
-        // Listen for language changes
-        document.addEventListener('languageChanged', function(e) {
-          if (e.detail.language === 'zh') {
-            pdfLink.textContent = chineseText;
-          } else {
-            pdfLink.textContent = englishText;
-          }
-        });
-      }
-    });
   </script>
 </body>
 </html>

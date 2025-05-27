@@ -5,21 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Andrew Liao's personal academic website." />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="css/i18n.css" />
   <link rel="icon" href="favicon.ico" />
-  <title data-i18n="home.title">Andrew Liao</title>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <title data-i18n="index.title">Andrew Liao</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/i18n.css">
-  <link rel="stylesheet" href="css/personalization.css">
-  <link rel="stylesheet" href="css/animations.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="js/i18n.js" defer></script>
-  <script src="js/user-personalization.js" defer></script>
   <script src="js/loader.js" defer></script>
   <script src="js/lazy-load.js" defer></script>
   <script src="js/aos.js" defer></script>
@@ -34,24 +26,78 @@
     img.lazy-loaded, [data-bg-src].lazy-loaded {
       opacity: 1;
     }
+
+    /* Center profile picture */
+    .profile-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin: 2rem auto;
+      max-width: 600px;
+    }
+
+    .headshot {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      margin: 0 auto 1.5rem;
+      border: 3px solid var(--accent-color);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .headshot:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Minimal navbar */
+    .navbar {
+      padding: 1rem 2rem;
+      justify-content: space-between;
+    }
+
+    .nav-left {
+      flex: 1;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Mobile menu styles */
+    .mobile-menu {
+      background: var(--bg-color);
+      border-left: 1px solid var(--border-color);
+    }
+
+    .mobile-menu a {
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .mobile-menu .social-links {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .mobile-menu .social-links a {
+      padding: 0.5rem;
+    }
   </style>
 </head>
-<body class="fade-transition" data-title-key="home.title">
+<body class="fade-transition" data-title-key="index.title">
   <nav class="navbar" aria-label="Main navigation">
     <div class="nav-left">
-      <a href="index.html" class="nav-title" aria-current="page"><span>Andrew Liao</span> <span class="chinese-name" lang="zh-Hant">廖英劭</span></a>
+      <a href="index.html" class="nav-title"><span>Andrew Liao</span> <span class="chinese-name" lang="zh-Hant">廖英劭</span></a>
     </div>
     <div class="nav-right">
-      <a href="projects.html" data-i18n="common.nav.home">Projects</a>
-      <a href="publications.html" data-i18n="common.nav.publications">Publications</a>
-      <a href="cv.html" data-i18n="common.nav.cv">CV</a>
-      <a href="blog/index.html" data-i18n="common.nav.blog">Blog</a>
-      <a href="notes/index.html" data-i18n="common.nav.notes">Notes</a>
-      <a href="videos.html" data-i18n="common.nav.videos">Videos</a>
-      <a href="mailto:yl8520@nyu.edu" aria-label="Email me"><img src="assets/gmail.black.svg" alt="Email" class="icon" /></a>
-      <a href="https://github.com/ALiao18" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile"><img src="assets/github.black.svg" alt="GitHub" class="icon" /></a>
-      <a href="https://www.linkedin.com/in/andrew-liao18/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile"><img src="assets/linkedin.black.svg" alt="LinkedIn" class="icon" /></a>
-      <div class="language-selector" id="language-selector" aria-label="Select language"></div>
       <button id="toggle-dark" aria-label="Toggle dark mode">
         <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"></circle>
@@ -76,39 +122,28 @@
   </nav>
   <div class="mobile-menu">
     <button class="mobile-menu-close" aria-label="Close menu">×</button>
-    <a href="projects.html" data-i18n="common.nav.home">Projects</a>
+    <a href="projects.html" data-i18n="common.nav.projects">Projects</a>
     <a href="publications.html" data-i18n="common.nav.publications">Publications</a>
     <a href="cv.html" data-i18n="common.nav.cv">CV</a>
     <a href="blog/index.html" data-i18n="common.nav.blog">Blog</a>
     <a href="notes/index.html" data-i18n="common.nav.notes">Notes</a>
     <a href="videos.html" data-i18n="common.nav.videos">Videos</a>
+    <div class="language-selector" id="language-selector" aria-label="Select language"></div>
+    <div class="social-links">
+      <a href="mailto:yl8520@nyu.edu" aria-label="Email me"><img src="assets/gmail.black.svg" alt="Email" class="icon" /></a>
+      <a href="https://github.com/ALiao18" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile"><img src="assets/github.black.svg" alt="GitHub" class="icon" /></a>
+      <a href="https://www.linkedin.com/in/andrew-liao18/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile"><img src="assets/linkedin.black.svg" alt="LinkedIn" class="icon" /></a>
+    </div>
   </div>
   <hr class="nav-divider">
 
   <main class="container">
-    <header class="profile-header">
-      <img src="assets/headshot.jpg" alt="Andrew Liao's portrait" class="headshot" />
-      <h1>Andrew Liao <span class="chinese-name" lang="zh-Hans">廖英劭</span></h1>
-      <p class="subtitle">CS & DS Undergraduate @ NYU | Aspiring ML Researcher</p>
-    </header>
-
-    <section class="hero">
+    <section class="profile-header">
       <div class="content-wrapper">
-        <!-- Removing redundant subtitle -->
-      </div>
-    </section>
-
-    <section class="about">
-      <div class="content-wrapper">
-        <h2 class="aos aos-fade-up" data-i18n="home.intro.aboutTitle">About Me</h2>
-        <p class="aos aos-fade-up delay-100" data-i18n="home.intro.aboutContent">I'm Andrew, a senior at NYU studying Computer Science and Data Science. My academic interests lie in reinforcement learning, explainable AI, and physics-informed machine learning. I'm currently involved in research with the GRAIL and CN3 Labs, working on world models and seizure prediction.</p>
-      </div>
-    </section>
-
-    <section class="news">
-      <div class="content-wrapper">
-        <h2 class="aos aos-fade-up" data-i18n="home.intro.newsTitle">Recent News</h2>
-        <p class="aos aos-fade-up delay-100" data-i18n="home.intro.newsContent">Coming soon...</p>
+        <img src="assets/headshot.jpg" alt="Andrew Liao" class="headshot aos aos-fade-up" />
+        <h1 class="aos aos-fade-up delay-100">Andrew Liao</h1>
+        <p class="subtitle aos aos-fade-up delay-200" data-i18n="index.subtitle">Computer Science Student at NYU</p>
+        <p class="aos aos-fade-up delay-300" data-i18n="index.bio">Passionate about technology and innovation.</p>
       </div>
     </section>
   </main>
