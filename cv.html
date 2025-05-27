@@ -13,6 +13,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="js/i18n.js" defer></script>
   <script src="js/loader.js" defer></script>
+  <script src="js/lazy-load.js" defer></script>
+  <script src="js/aos.js" defer></script>
+  
+  <style>
+    /* Lazy loading animation styles */
+    img[data-src], [data-bg-src] {
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    
+    img.lazy-loaded, [data-bg-src].lazy-loaded {
+      opacity: 1;
+    }
+  </style>
 </head>
 <body class="fade-transition" data-title-key="cv.title">
   <nav class="navbar" aria-label="Main navigation">
@@ -43,19 +57,37 @@
           <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
         </svg>
       </button>
+      <button class="mobile-menu-btn" aria-label="Open menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
     </div>
   </nav>
+  <div class="mobile-menu">
+    <button class="mobile-menu-close" aria-label="Close menu">×</button>
+    <a href="projects.html" data-i18n="common.nav.projects">Projects</a>
+    <a href="publications.html" data-i18n="common.nav.publications">Publications</a>
+    <a href="cv.html" data-i18n="common.nav.cv">CV</a>
+    <a href="blog/index.html" data-i18n="common.nav.blog">Blog</a>
+    <a href="notes/index.html" data-i18n="common.nav.notes">Notes</a>
+    <a href="videos.html" data-i18n="common.nav.videos">Videos</a>
+  </div>
   <hr class="nav-divider">
 
   <main class="container">
-    <div class="cv-header">
-      <h1 data-i18n="cv.headingTitle">Curriculum Vitae</h1>
-      <a href="assets/AndrewLiao_Resume.pdf" target="_blank" rel="noopener noreferrer" class="cv-pdf-link">(Short CV PDF)</a>
-    </div>
+    <section class="cv-header">
+      <div class="content-wrapper">
+        <h1 class="aos aos-fade-up" data-i18n="cv.headingTitle">Curriculum Vitae</h1>
+        <a href="assets/AndrewLiao_Resume.pdf" target="_blank" rel="noopener noreferrer" class="cv-pdf-link aos aos-fade-up delay-100">(Short CV PDF)</a>
+      </div>
+    </section>
     
     <div class="cv-sections">
       <!-- Education Section -->
-      <details class="cv-expandable">
+      <details class="cv-expandable aos aos-fade-up">
         <summary data-i18n="cv.education.title">Education</summary>
         <div class="cv-content">
           <!-- Content will be added later -->
@@ -63,7 +95,7 @@
       </details>
       
       <!-- Experience Section -->
-      <details class="cv-expandable">
+      <details class="cv-expandable aos aos-fade-up delay-100">
         <summary data-i18n="cv.experience.title">Experience</summary>
         <div class="cv-content">
           <!-- Content will be added later -->
@@ -71,7 +103,7 @@
       </details>
       
       <!-- Skills Section -->
-      <details class="cv-expandable">
+      <details class="cv-expandable aos aos-fade-up delay-200">
         <summary data-i18n="cv.skills.title">Skills</summary>
         <div class="cv-content">
           <!-- Content will be added later -->
@@ -79,7 +111,7 @@
       </details>
       
       <!-- Projects Section -->
-      <details class="cv-expandable">
+      <details class="cv-expandable aos aos-fade-up delay-300">
         <summary data-i18n="cv.projects.title">Projects</summary>
         <div class="cv-content">
           <!-- Content will be added later -->
@@ -87,7 +119,7 @@
       </details>
       
       <!-- Awards Section -->
-      <details class="cv-expandable">
+      <details class="cv-expandable aos aos-fade-up delay-400">
         <summary data-i18n="cv.awards.title">Awards & Honors</summary>
         <div class="cv-content">
           <!-- Content will be added later -->
@@ -101,6 +133,74 @@
   </footer>
 
   <script>
+    // Section animations
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('section').forEach(section => {
+        observer.observe(section);
+      });
+    });
+
+    // Mobile menu functionality
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const mobileMenuClose = document.querySelector('.mobile-menu-close');
+    const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+
+    function toggleMobileMenu() {
+      mobileMenu.classList.toggle('active');
+      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    }
+
+    mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+    mobileMenuClose.addEventListener('click', toggleMobileMenu);
+
+    // Close mobile menu when clicking a link
+    mobileMenuLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (mobileMenu.classList.contains('active') && 
+          !mobileMenu.contains(e.target) && 
+          !mobileMenuBtn.contains(e.target)) {
+        toggleMobileMenu();
+      }
+    });
+
+    // Highlight current page in navigation
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentLocation = window.location.pathname;
+      const navLinks = document.querySelectorAll('.navbar a, .mobile-menu a');
+      
+      navLinks.forEach(link => {
+        const linkPath = link.getAttribute('href');
+        if (currentLocation.endsWith(linkPath) || 
+            (currentLocation.endsWith('/') && linkPath === 'index.html')) {
+          link.classList.add('active');
+          link.setAttribute('aria-current', 'page');
+        }
+      });
+    });
+
     // Dark mode toggle
     const toggleBtn = document.getElementById('toggle-dark');
     const icon = document.getElementById('theme-icon');
