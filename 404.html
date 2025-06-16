@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="css/i18n.css">
   <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
   <script src="js/i18n.js" defer></script>
+  <script src="js/site.js" defer></script>
   
   <style>
     .error-container {
@@ -120,13 +121,6 @@
       }
     });
     
-    // Dark mode toggle logic (simplified for error page)
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const storedTheme = localStorage.getItem('theme');
-    
-    if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
-      document.body.classList.add('dark-mode');
-    }
   </script>
 </body>
 </html> 

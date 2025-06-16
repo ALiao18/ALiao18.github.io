@@ -16,6 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="../js/i18n.js" defer></script>
   <script src="../js/loader.js" defer></script>
+  <script src="../js/site.js" defer></script>
 </head>
 <body class="fade-transition" data-title-key="blog.title">
   <nav class="navbar" aria-label="Main navigation">
@@ -82,126 +83,5 @@
     <p data-i18n="common.footer.copyright">© 2025 Andrew Liao</p>
   </footer>
 
-  <script>
-    // Highlight current page in navigation
-    document.addEventListener('DOMContentLoaded', function() {
-      const currentLocation = window.location.pathname;
-      const navLinks = document.querySelectorAll('.navbar a');
-      
-      navLinks.forEach(link => {
-        const linkPath = link.getAttribute('href');
-        if (linkPath === '../blog/index.html' || 
-            (currentLocation.includes('/blog/') && linkPath === '../blog/index.html')) {
-          link.classList.add('active');
-          link.setAttribute('aria-current', 'page');
-        }
-      });
-    });
-
-    // Function to load blog posts (will be used when posts are added)
-    function loadPost(filename, linkElement) {
-      // Remove '.md' and replace with '.json' for storing post content
-      const jsonFile = filename.replace('.md', '.json');
-      
-      fetch(jsonFile)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Post not found');
-          }
-          return response.json();
-        })
-        .then(data => {
-          const container = document.getElementById("post-container");
-          container.innerHTML = `
-            <h2>${data.title}</h2>
-            <div class="post-metadata">
-              <span>Published: ${data.date}</span>
-              ${data.tags ? `<span class="post-tags">Tags: ${data.tags.join(', ')}</span>` : ''}
-            </div>
-            <div class="post-content">
-              ${marked.parse(data.content)}
-            </div>
-          `;
-          
-          // Render any math content
-          if (window.renderMathInElement) {
-            renderMathInElement(container);
-          }
-          
-          // Highlight active link
-          document.querySelectorAll('#blog-toc a').forEach(el => {
-            el.classList.remove('active');
-            el.setAttribute('aria-current', 'false');
-          });
-          linkElement.classList.add('active');
-          linkElement.setAttribute('aria-current', 'true');
-        })
-        .catch(error => {
-          console.error('Error loading post:', error);
-          document.getElementById("post-container").innerHTML = `<p>Error loading post. Please try again later.</p>`;
-        });
-    }
-
-    // Dark mode toggle
-    const toggleBtn = document.getElementById('toggle-dark');
-    const icon = document.getElementById('theme-icon');
-    const socialIcons = {
-      gmail: document.querySelector('a[href*="mailto"] img'),
-      github: document.querySelector('a[href*="github"] img'),
-      linkedin: document.querySelector('a[href*="linkedin"] img')
-    };
-    
-    // Check for stored preference or system preference
-    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    const storedTheme = localStorage.getItem('theme');
-    
-    if (storedTheme === 'dark' || (!storedTheme && prefersDarkScheme.matches)) {
-      document.body.classList.add('dark-mode');
-      updateIcon(true);
-    } else {
-      document.body.classList.remove('dark-mode');
-      updateIcon(false);
-    }
-    
-    toggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      const isDarkMode = document.body.classList.contains('dark-mode');
-      localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-      updateIcon(isDarkMode);
-    });
-    
-    function updateIcon(isDark) {
-      // Update theme icon
-      if (isDark) {
-        icon.innerHTML = `
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"></path>
-        `;
-      } else {
-        icon.innerHTML = `
-          <circle cx="12" cy="12" r="5"></circle>
-          <line x1="12" y1="1" x2="12" y2="3"></line>
-          <line x1="12" y1="21" x2="12" y2="23"></line>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-          <line x1="1" y1="12" x2="3" y2="12"></line>
-          <line x1="21" y1="12" x2="23" y2="12"></line>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        `;
-      }
-      
-      // Update social icons
-      Object.keys(socialIcons).forEach(key => {
-        if (socialIcons[key]) {
-          const iconPath = socialIcons[key].getAttribute('src');
-          const newPath = isDark 
-            ? iconPath.replace('.black.svg', '.white.svg') 
-            : iconPath.replace('.white.svg', '.black.svg');
-          socialIcons[key].setAttribute('src', newPath);
-        }
-      });
-    }
-  </script>
 </body>
 </html>
