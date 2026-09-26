@@ -12,6 +12,7 @@
   (function(){var t=localStorage.getItem('al-theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;})();
 </script>
 <script src="assets/library.js"></script>
+<script src="assets/graph.js"></script>
 <style>
 :root{--bg:#ffffff;--ink:#111111;--muted:#767676;--rule:#e8e8e8}
 [data-theme=dark]{--bg:#0b0b0b;--ink:#ededed;--muted:#8a8a8a;--rule:#242424}
@@ -22,9 +23,6 @@ a{color:inherit;text-decoration:none}
 a:hover{opacity:.6}
 button{all:unset;cursor:pointer}
 .u{text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--rule)}
-.stage{position:fixed;inset:0;z-index:0}
-#m{width:100%;height:100%;display:block;touch-action:manipulation}
-header{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:32px 48px;font-size:15px;font-weight:400}
 .name{font-size:17px}
 .brand{display:flex;align-items:center;gap:14px}
 #gz{width:56px;height:44px;display:block;margin:-12px 0}
@@ -33,17 +31,6 @@ nav{display:flex;align-items:center;gap:clamp(14px,2.2vw,28px);flex-wrap:nowrap;
 nav a{color:var(--muted);transition:color .3s}
 nav a.on{color:var(--ink)}
 .theme{width:13px;height:13px;border-radius:50%;border:1px solid var(--ink);background:linear-gradient(90deg,var(--ink) 50%,transparent 50%);margin-left:4px;flex:none}
-.home{position:fixed;left:48px;bottom:64px;max-width:400px;z-index:1;pointer-events:none;transition:opacity .6s}
-.home p{margin:0 0 14px;font-size:19px;line-height:1.65;text-wrap:pretty}
-.home a{pointer-events:auto}
-.cap{font-style:italic;font-size:13px;color:var(--muted)}
-.panel{position:fixed;z-index:1;left:55vw;top:150px;width:min(480px,38vw);max-height:calc(100vh - 200px);overflow:auto;padding-right:8px;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .7s ease,transform .7s ease;scrollbar-width:thin}
-.panel.on{opacity:1;transform:none;pointer-events:auto}
-.meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:14px}
-.panel h2{margin:0 0 28px;font-weight:400;font-size:42px;line-height:1.05;letter-spacing:-.01em}
-.page{display:none;flex-direction:column;gap:20px}
-.page.on{display:flex}
-.page p{margin:0;font-size:18px;line-height:1.65;text-wrap:pretty}
 .links{display:flex;gap:24px;flex-wrap:wrap;font-size:16px;color:var(--muted)}
 .portrait{width:128px;height:160px;object-fit:cover;object-position:50% 62%;background:var(--rule);display:block;filter:grayscale(.15)}
 .idrow{display:grid;grid-template-columns:128px 1fr;gap:22px;align-items:end;padding-bottom:22px;border-bottom:1px solid var(--rule);margin-bottom:4px}
@@ -55,8 +42,6 @@ nav a.on{color:var(--ink)}
 .ph{display:flex;align-items:baseline;gap:18px}
 #cvq{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);border:1px solid var(--rule);padding:4px 9px;letter-spacing:0;white-space:nowrap;flex:none;align-self:center;line-height:1.3}
 #cvq:hover{border-color:var(--muted);opacity:1;color:var(--ink)}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
-.pgrid img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
 .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-bottom:10px;border-bottom:1px solid var(--rule);margin-top:8px}
 .list{display:flex;flex-direction:column;gap:18px}
 .row{display:grid;grid-template-columns:78px 1fr;gap:16px;align-items:baseline}
@@ -88,13 +73,10 @@ nav a.on{color:var(--ink)}
 .es{display:block;font-size:15.5px;line-height:1.5;color:var(--muted);margin-top:6px;text-wrap:pretty}
 .ea{display:block;font-size:14.5px;color:var(--muted);margin-top:4px;font-style:italic}
 .more{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);display:block;margin-top:8px}
-@media (max-width:860px){.entry{grid-template-columns:64px 1fr;gap:12px}}
 .bar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:-8px}
 .bar .d{font-size:11.5px}
 .allbtn{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink);border:1px solid var(--rule);padding:5px 10px;white-space:nowrap}
 .allbtn:hover{border-color:var(--muted)}
-.emb{width:100%;height:230px;display:block;background:transparent;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
-.cap2{font-style:italic;font-size:14px;color:var(--muted);margin-top:-8px;text-wrap:pretty}
 .filters{display:flex;flex-direction:column;gap:8px;margin-top:-6px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);border:1px solid var(--rule);padding:3px 8px;line-height:1.3;transition:color .2s,border-color .2s,background .2s}
@@ -115,29 +97,60 @@ nav a.on{color:var(--ink)}
 .dlist a{cursor:pointer}
 .dlist .au{color:var(--muted);font-size:11px;margin-left:5px}
 .dlist .x{background:var(--rule)}
-@media (max-width:860px){.drawer{width:100%;border-left:0}.emb{height:210px}}
+
+:root{--colw:min(540px,38vw)}
+.hrow{display:contents}.theme-m{display:none}
+header{position:fixed;top:0;left:0;right:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:30px 48px 36px;font-size:15px;font-weight:400;background:linear-gradient(var(--bg) 60%,transparent);pointer-events:none;transition:background .3s}
+header>*{pointer-events:auto}
+.stage{position:fixed;inset:0;z-index:0}
+#m{width:100%;height:100%;display:block;touch-action:pan-y;user-select:none}
+.home{position:fixed;left:48px;bottom:64px;max-width:400px;z-index:1;pointer-events:none}
+.home p{margin:0;font-size:19px;line-height:1.65}
+.home a{pointer-events:auto;text-decoration:underline;text-underline-offset:5px;text-decoration-color:var(--muted)}
+main{position:relative;z-index:1;width:var(--colw);margin-left:clamp(440px,55vw,calc(100vw - var(--colw) - 72px));padding:100vh 0 45vh;pointer-events:none}
+.sec{pointer-events:auto;display:flex;flex-direction:column;gap:20px;padding-bottom:22vh}
+.sec h2{margin:0 0 8px;font-weight:400;font-size:42px;line-height:1.05;letter-spacing:-.01em}
+.meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:-6px}
+.sec p{margin:0;font-size:18px;line-height:1.65;text-wrap:pretty}
+.stack{display:flex;flex-direction:column;gap:20px}
+.entry a.et:hover{opacity:1}
+.emb{width:100%;height:clamp(220px,34vh,320px);display:block;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);touch-action:pan-y}
+.cap2{font-size:14px;color:var(--muted);margin-top:-8px;display:flex;gap:4px 16px;flex-wrap:wrap;align-items:baseline;text-wrap:pretty}
+.cap2 .lg{font-family:'JetBrains Mono',monospace;font-size:11px;display:flex;gap:12px}
+.lk{display:flex;flex-wrap:wrap;gap:4px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:8px}
+.lk button{color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--rule)}
+.lk button:hover{text-decoration-color:var(--ink)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:18px 14px}
+.ptile{margin:0;display:flex;flex-direction:column;gap:6px;align-items:stretch!important}
+.bar .chips{flex-wrap:nowrap;flex:none}
+.ptile .pimg{cursor:pointer}
+.ptile img,.ptile .ph0{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;background:var(--rule)}
+.ph0{display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted)}
+.ptile figcaption{font-size:14.5px;line-height:1.35}
+.ptile.hl figcaption{text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--muted)}
+.ptile .lk{margin-top:0}
+.flash{animation:flash 1.8s ease}
+@keyframes flash{0%,35%{background:var(--rule)}100%{background:transparent}}
 #coord{position:fixed;left:48px;bottom:30px;z-index:1;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);pointer-events:none}
-@media (max-width:860px){
-  header{flex-direction:column;align-items:flex-start;gap:14px;padding:22px 22px 8px}
+@media (max-width:860px){.entry{grid-template-columns:64px 1fr;gap:12px}.drawer{width:100%;border-left:0}.row{grid-template-columns:64px 1fr;gap:12px}}
+@media (max-width:860px), (max-width:1180px) and (max-aspect-ratio:4/5){
+  header{position:static;background:none;flex-direction:column;align-items:flex-start;gap:14px;padding:22px 22px 10px}
   .hrow{display:flex;width:100%;justify-content:space-between;align-items:center}
+  .theme-m{display:block}.theme-d,#coord{display:none}
   nav{gap:8px 20px;font-size:15px;flex-wrap:wrap;white-space:normal}
-  .stage{position:relative;height:clamp(300px,50vh,460px)}
-  .home{position:static;padding:4px 22px 40px;max-width:none;pointer-events:auto}
-  .home.off{display:none}
-  .panel{position:static;width:auto;max-height:none;overflow:visible;padding:4px 22px 56px;display:none}
-  .panel.on{display:block}
-  .panel h2{font-size:36px}
-  .row{grid-template-columns:64px 1fr;gap:12px}
-  #coord,.theme-d{display:none}
+  .stage{position:sticky;top:0;height:clamp(220px,36vh,360px);z-index:2;background:var(--bg);border-bottom:1px solid var(--rule)}
+  .home{position:static;padding:22px 22px 0;max-width:none}
+  main{width:auto;margin:0;padding:28px 22px 30vh;pointer-events:auto}
+  .sec{padding-bottom:88px}
+  .sec h2{font-size:36px}
 }
-@media (min-width:861px){ .hrow{display:contents} .theme-m{display:none} }
+@media (max-height:540px) and (orientation:landscape) and (max-width:1180px){.stage{position:relative}}
 </style>
 </head>
 <body>
-
 <header>
   <div class="hrow">
-    <div class="brand"><a class="name" href="#">Andrew Liao<span class="zh" lang="zh-Hant">廖英劭</span></a><canvas id="gz" width="56" height="44" aria-hidden="true"></canvas></div>
+    <div class="brand"><a class="name" href="#" data-top>Andrew Liao<span class="zh" lang="zh-Hant">廖英劭</span></a><canvas id="gz" width="56" height="44" aria-hidden="true"></canvas></div>
     <button class="theme theme-m" aria-label="Toggle theme"></button>
   </div>
   <nav id="nav">
@@ -146,19 +159,16 @@ nav a.on{color:var(--ink)}
   </nav>
 </header>
 
-<div class="stage"><canvas id="m" aria-label="A 3D neural manifold. Each labelled point is a section of the site."></canvas></div>
+<div class="stage" id="stage"><canvas id="m" aria-label="A 3D neural manifold. Each labelled point is a section of the site; the dark point follows your scroll position."></canvas></div>
 
-<div class="home" id="home">
-  <p>Hi, I'm <a class="u" href="#about">Andrew</a>.</p>
-</div>
+<div class="home" id="home"><p>Hi, I'm <a href="#about">Andrew</a>.</p></div>
 
-<div class="panel" id="panel">
-  <div class="meta" id="meta"></div>
-  <h2 class="ph"><span id="ptitle"></span><a id="cvq" href="resume.pdf" download hidden>CV ↓</a></h2>
-
-  <section class="page" data-page="about">
+<main id="main">
+  <section class="sec" id="about">
+    <div class="meta"></div>
+    <h2 class="ph"><span>About</span><a id="cvq" href="resume.pdf" download>CV ↓</a></h2>
     <div class="idrow">
-      <img class="portrait" id="portrait" alt="Andrew Liao">
+      <img class="portrait" src="portrait.jpg" alt="Andrew Liao">
       <div class="idlinks">
         <a href="mailto:aliao3@andrew.cmu.edu"><span>email</span><span>↗</span></a>
         <a href="https://github.com/ALiao18"><span>github</span><span>↗</span></a>
@@ -166,60 +176,55 @@ nav a.on{color:var(--ink)}
       </div>
     </div>
     <div class="bio">
-    <p>Hi, my name is Andrew Liao (<span lang="zh-Hant">廖英劭</span>). I am an M.S. student in AI Engineering at Carnegie Mellon University, advised by Byron Yu. My research interests include brain-computer interfaces (BCIs), neural decoding, and machine learning.</p>
-    <p>Prior to CMU, I studied Computer and Data Science at New York University's Courant Institute. I have also been fortunate to work with Sage (Zhe) Chen, Joaquin Gonzalez, and Laura Gould.</p>
-    <p>I am currently seeking internship opportunities for Summer 2027.</p>
+      <p>Hi, my name is Andrew Liao (<span lang="zh-Hant">廖英劭</span>). I am an M.S. student in AI Engineering at Carnegie Mellon University, advised by Byron Yu. My research interests include brain-computer interfaces (BCIs), neural decoding, and machine learning.</p>
+      <p>Prior to CMU, I studied Computer and Data Science at New York University's Courant Institute. I have also been fortunate to work with Sage (Zhe) Chen, Joaquin Gonzalez, and Laura Gould.</p>
+      <p>I am currently seeking internship opportunities for Summer 2027.</p>
     </div>
   </section>
-
-  <section class="page" data-page="news"><div class="empty">Coming soon!</div></section>
-
-  <section class="page" data-page="writings">
+  <section class="sec" id="news">
+    <div class="meta"></div><h2>News</h2>
+    <div class="empty">Coming soon!</div>
+    <div class="list" style="opacity:.55">
+      <div class="row news"><span class="d">2026</span><span class="m">News 1</span></div>
+      <div class="row news"><span class="d">2026</span><span class="m">News 2</span></div>
+      <div class="row news"><span class="d">2026</span><span class="m">News 3</span></div>
+    </div>
+  </section>
+  <section class="sec" id="writings">
+    <div class="meta"></div><h2>Writings</h2>
     <div class="empty" data-soon="posts">Coming soon!</div>
-    <div class="page" data-live="posts" style="display:flex">
-    <div class="bar"><span class="d" id="postsCount"></span><button class="allbtn" data-all="posts">All titles →</button></div>
-    <div class="filters" id="fposts"></div>
-    <canvas class="emb" id="embPosts"></canvas>
-    <div class="cap2">Each point is a post, placed by the first three principal components of its text embedding. Hover a point or a title.</div>
-    <div id="postsList"></div>
+    <div class="stack" data-live="posts">
+      <div class="bar"><span class="d" id="postsCount"></span><span class="chips"><button class="allbtn" data-mode="posts">PCA view</button><button class="allbtn" data-all="posts">All titles →</button></span></div>
+      <div class="filters" id="fposts"></div>
+      <canvas class="emb" id="gposts"></canvas>
+      <div class="cap2" data-cap="posts"></div>
+      <div id="postsList"></div>
     </div>
   </section>
-
-  <section class="page" data-page="reading">
+  <section class="sec" id="reading">
+    <div class="meta"></div><h2>Reading list</h2>
     <div class="empty" data-soon="books">Coming soon!</div>
-    <div class="page" data-live="books" style="display:flex">
-    <div class="bar"><span class="d" id="booksCount"></span><button class="allbtn" data-all="books">All titles →</button></div>
-    <div class="filters" id="fbooks"></div>
-    <canvas class="emb" id="embBooks"></canvas>
-    <div class="cap2">Books I've read outside of work, placed by the first three principal components of a text embedding. Nearby books are similar. Hover to see titles.</div>
-    <div class="sub">Notes on a few</div>
-    <div id="booksList"></div>
+    <div class="stack" data-live="books">
+      <div class="bar"><span class="d" id="booksCount"></span><span class="chips"><button class="allbtn" data-mode="books">PCA view</button><button class="allbtn" data-all="books">All titles →</button></span></div>
+      <div class="filters" id="fbooks"></div>
+      <canvas class="emb" id="gbooks"></canvas>
+      <div class="cap2" data-cap="books"></div>
+      <div id="booksList"></div>
     </div>
   </section>
-  <section class="page" data-page="photos">
+  <section class="sec" id="photos">
+    <div class="meta"></div><h2>Photos</h2>
     <div class="empty" data-soon="photos">Coming soon!</div>
-    <div class="page" data-live="photos" style="display:flex">
-    <div class="bar"><span class="d" id="photosCount"></span><button class="allbtn" data-all="photos">All photos →</button></div>
-    <div class="filters" id="fphotos"></div>
-    <canvas class="emb" id="embPhotos"></canvas>
-    <div class="cap2">Each point is a photo, placed by the first three principal components of its image embedding. Hover to see captions.</div>
-    <div class="pgrid" id="photosList"></div>
+    <div class="stack" data-live="photos">
+      <div class="bar"><span class="d" id="photosCount"></span><span class="chips"><button class="allbtn" data-mode="photos">PCA view</button><button class="allbtn" data-all="photos">All photos →</button></span></div>
+      <div class="filters" id="fphotos"></div>
+      <canvas class="emb" id="gphotos"></canvas>
+      <div class="cap2" data-cap="photos"></div>
+      <div class="pgrid" id="photosList"></div>
     </div>
   </section>
-
-  <section class="page" data-page="contact">
-    <p>I welcome all discussions. Surprise me.</p>
-    <div class="mail"><a class="u" href="mailto:aliao3@andrew.cmu.edu">aliao3@andrew.cmu.edu</a><button class="copy" id="copyMail">copy</button></div>
-    <form class="form" id="contactForm">
-      <label>Name<input name="name" autocomplete="name"></label>
-      <label>Subject<input name="subject" placeholder="e.g. Hello"></label>
-      <label>Message<textarea name="message" required></textarea></label>
-      <button class="send" type="submit">Open in email →</button>
-    </form>
-    <div class="links"><a class="u" href="https://github.com/ALiao18">github</a><a class="u" href="https://linkedin.com/in/aliao18">linkedin</a></div>
-  </section>
-
-  <section class="page" data-page="cv">
+  <section class="sec" id="cv">
+    <div class="meta"></div><h2>CV</h2>
     <div class="sub">Education</div>
     <div class="list">
       <div class="row"><span class="d">2026–2028</span><span><span class="m">MS, AI Engineering (Research Track)</span><span class="s">Carnegie Mellon University · Department Head’s Fellowship · Advisor: Byron Yu</span></span></div>
@@ -234,7 +239,19 @@ nav a.on{color:var(--ink)}
     </div>
     <a class="u" href="resume.pdf" style="font-size:16px;color:var(--muted);margin-top:4px">Download PDF</a>
   </section>
-</div>
+  <section class="sec" id="contact">
+    <div class="meta"></div><h2>Contact</h2>
+    <p>I welcome all discussions. Surprise me.</p>
+    <div class="mail"><a class="u" href="mailto:aliao3@andrew.cmu.edu">aliao3@andrew.cmu.edu</a><button class="copy" id="copyMail">copy</button></div>
+    <form class="form" id="contactForm">
+      <label>Name<input name="name" autocomplete="name"></label>
+      <label>Subject<input name="subject" placeholder="e.g. Hello"></label>
+      <label>Message<textarea name="message" required></textarea></label>
+      <button class="send" type="submit">Open in email →</button>
+    </form>
+    <div class="links"><a class="u" href="https://github.com/ALiao18">github</a><a class="u" href="https://linkedin.com/in/aliao18">linkedin</a></div>
+  </section>
+</main>
 
 <div id="coord"></div>
 <aside class="drawer" id="drawer" aria-hidden="true">
@@ -244,277 +261,6 @@ nav a.on{color:var(--ink)}
   <div class="dlist" id="dlist"></div>
 </aside>
 
-<script>
-(function () {
-  const pi = document.getElementById('portrait'); pi.src = 'portrait.jpg';
-  const SECS = [['about', 'About'], ['news', 'News'], ['writings', 'Writings'], ['reading', 'Reading list'], ['photos', 'Photos'], ['cv', 'CV'], ['contact', 'Contact']];
-  const PAL = { light: { bg: '#ffffff', ink: '#111111', muted: '#767676' }, dark: { bg: '#0b0b0b', ink: '#ededed', muted: '#8a8a8a' } };
-  const SATS = (window.POSTS || []).map((p, k) => ({ sec: 2, o: [((k * 0.37) % 0.12) - 0.06, ((k * 0.53) % 0.1) - 0.05, ((k * 0.71) % 0.1) - 0.05, ((k * 0.29) % 0.1) - 0.05], title: p.t, href: p.href }));
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const rgba = (h, a) => { const n = parseInt(h.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; };
-  const $ = s => document.querySelector(s);
-  const cv = $('#m'), ctx = cv.getContext('2d'), panel = $('#panel'), home = $('#home'), coord = $('#coord');
-
-  const curve = t => { const r = 2 + Math.cos(3 * t); return [r * Math.cos(2 * t) / 3, Math.sin(3 * t) * 0.4, r * Math.sin(2 * t) / 3]; };
-  const gauss = () => { let u = 0; while (!u) u = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.283 * Math.random()); };
-  const cloud = Array.from({ length: 1400 }, () => curve(Math.random() * 6.283).map(x => x + gauss() * 0.07));
-  const line = Array.from({ length: 500 }, (_, i) => curve(i / 499 * 6.283));
-  const T = SECS.map((_, i) => i / SECS.length * 6.283 + 0.35);
-  const ang = (a, b) => { let d = (a - b) % 6.283; if (d > Math.PI) d -= 6.283; if (d < -Math.PI) d += 6.283; return d; };
-
-  let W = 0, H = 0, L = {}, mobile = false;
-  function resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    W = cv.offsetWidth; H = cv.offsetHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    mobile = innerWidth <= 860;
-    const mn = Math.min(W, H);
-    L = mobile
-      ? { S0: mn * 0.42, S1: mn * 0.42, C: [W / 2, H / 2], C1: [W / 2, H / 2], fade: 0 }
-      : (() => { const top = 100, bot = H - 30, hr = home.offsetLeft + home.offsetWidth + 24; let S0 = Math.min((bot - top) / 1.75, W * 0.28), cx0 = Math.max(W * 0.6, hr + S0 * 1.05); if (cx0 + S0 * 1.05 > W - 24) { S0 = Math.max(80, (W - 24 - hr) / 2.1); cx0 = hr + S0 * 1.05; } const fade = panel.getBoundingClientRect().left || W * 0.55, S1 = Math.max(70, Math.min((fade - 144) / 2.2, (H - 170) / 1.75)); return { S0, S1, C: [cx0, (top + bot) / 2], C1: [(fade - 64) / 2, (H + 60) / 2], fade }; })();
-  }
-  addEventListener('resize', resize); resize();
-
-  const m = { x: 0, y: 0, in: false };
-  addEventListener('mousemove', e => { const r = cv.getBoundingClientRect(); m.x = e.clientX - r.left; m.y = e.clientY - r.top; m.in = m.x >= 0 && m.y >= 0 && m.x <= W && m.y <= H; });
-  document.addEventListener('mouseleave', () => { m.in = false; });
-
-  const nav = { phase: 0.35, from: 0, to: 0, t0: 0, dur: 1, moving: false, w: 0, wT: 0, yaw: 0.4, pitch: 0.45, auto: 0.4, page: null };
-  let labels = [], hover = -1, sats = [], shover = -1;
-
-  function show(id) {
-    const i = SECS.findIndex(s => s[0] === id), q = curve(T[i]);
-    document.querySelectorAll('.page').forEach(p => p.classList.toggle('on', p.dataset.page === id));
-    $('#ptitle').textContent = SECS[i][1]; $('#cvq').hidden = id !== 'about';
-    $('#meta').textContent = 'PC1 ' + q[0].toFixed(2) + ' · PC2 ' + q[1].toFixed(2) + ' · PC3 ' + q[2].toFixed(2);
-    panel.scrollTop = 0; panel.classList.add('on');
-  }
-  function setNav(id) { document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + id)); }
-  function go(id, instant) {
-    const i = SECS.findIndex(s => s[0] === id);
-    nav.page = i >= 0 ? id : null; setNav(nav.page);
-    document.title = i >= 0 ? SECS[i][1] + ' — Andrew Liao' : 'Andrew Liao';
-    if (i < 0) { nav.wT = 0; nav.moving = false; panel.classList.remove('on'); home.style.opacity = 1; home.classList.remove('off'); return; }
-    home.style.opacity = 0; home.classList.add('off');
-    if (instant) { nav.phase = T[i]; nav.w = nav.wT = 1; nav.moving = false; show(id); return; }
-    panel.classList.remove('on');
-    const d = ang(T[i], nav.phase);
-    nav.from = nav.phase; nav.to = nav.phase + d; nav.t0 = performance.now();
-    nav.dur = reduce ? 300 : 900 + 900 * Math.abs(d) / Math.PI; nav.moving = true; nav.wT = 1;
-  }
-  const fromHash = () => location.hash.replace('#', '');
-  addEventListener('hashchange', () => go(fromHash()));
-  go(fromHash(), true);
-
-  cv.addEventListener('click', e => {
-    const r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
-    let sb = -1; sats.forEach((p, i) => { if (Math.hypot(p[0] - x, p[1] - y) < (mobile ? 12 : 9)) sb = i; });
-    if (sb >= 0) { location.href = SATS[sb].href; return; }
-    let best = -1, bd = mobile ? 30 : 22;
-    labels.forEach((p, i) => { const d = Math.hypot(p[0] - x, p[1] - y); if (d < bd) { bd = d; best = i; } });
-    if (best >= 0) location.hash = SECS[best][0];
-  });
-
-  function toggleTheme() { const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = t; localStorage.setItem('al-theme', t); }
-  document.querySelectorAll('.theme').forEach(b => b.addEventListener('click', toggleTheme));
-
-  function frame() {
-    const pal = PAL[document.documentElement.dataset.theme] || PAL.light, now = performance.now();
-    if (nav.moving) {
-      const k = Math.min(1, (now - nav.t0) / nav.dur), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
-      nav.phase = nav.from + (nav.to - nav.from) * e;
-      if (k >= 1) { nav.moving = false; show(nav.page); }
-    } else if (nav.wT === 0 && !reduce) nav.phase += 0.0035;
-    nav.w += (nav.wT - nav.w) * 0.04;
-    if (nav.wT === 0 && !reduce) nav.auto += 0.002;
-    const w = nav.w, q = curve(nav.phase);
-    const yawTrack = Math.atan2(q[0], -q[2]) + 0.35;
-    const mx = m.in && !mobile ? (m.x - W / 2) / W : 0, my = m.in && !mobile ? (m.y - H / 2) / H : 0;
-    nav.yaw += ang(nav.auto + ang(yawTrack, nav.auto) * nav.wT + mx * (1.6 - 1.2 * nav.wT), nav.yaw) * 0.05;
-    nav.pitch += (0.45 - 0.25 * nav.wT + my * (0.9 - 0.6 * nav.wT) - nav.pitch) * 0.05;
-    const S = L.S0 + (L.S1 - L.S0) * w;
-    const cy = Math.cos(nav.yaw), sy = Math.sin(nav.yaw), cp = Math.cos(nav.pitch), sp = Math.sin(nav.pitch);
-    const raw = ([x, y, z]) => { const x1 = x * cy + z * sy, z1 = -x * sy + z * cy, y1 = y * cp - z1 * sp, z2 = y * sp + z1 * cp, f = 3.4 / (3.4 + z2); return [x1 * S * f, y1 * S * f, z2]; };
-        const ox = L.C[0] * (1 - w) + L.C1[0] * w, oy = L.C[1] * (1 - w) + L.C1[1] * w;
-    const proj = p => { const r = raw(p); return [r[0] + ox, r[1] + oy, r[2]]; };
-
-    ctx.fillStyle = pal.bg; ctx.fillRect(0, 0, W, H);
-    const ds = 1.4 + w * 0.6;
-    for (const c of cloud) { const [x, y, z] = proj(c); if (x < -4 || x > W + 4 || y < -4 || y > H + 4) continue; ctx.fillStyle = rgba(pal.muted, 0.14 + 0.3 * (1 - (z + 1.2) / 2.4)); ctx.fillRect(x, y, ds, ds); }
-    ctx.beginPath(); line.forEach((p, i) => { const [x, y] = proj(p); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
-    ctx.strokeStyle = rgba(pal.ink, 0.26); ctx.lineWidth = 1; ctx.stroke();
-    const n = 90;
-    for (let i = 1; i < n; i++) {
-      const a = proj(curve(nav.phase - (n - i + 1) * 0.006)), b = proj(curve(nav.phase - (n - i) * 0.006));
-      ctx.strokeStyle = rgba(pal.ink, (i / n) * 0.9); ctx.lineWidth = 1.2 + w * 0.8; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
-    }
-    sats = SATS.map(st => proj(curve(T[st.sec] + st.o[0]).map((v, j) => v + st.o[1 + j])));
-    labels = T.map(t => proj(curve(t)));
-    hover = -1; shover = -1;
-    if (m.in && !mobile) {
-      sats.forEach((p, i) => { if (Math.hypot(p[0] - m.x, p[1] - m.y) < 9) shover = i; });
-      if (shover < 0) labels.forEach((p, i) => { if (Math.hypot(p[0] - m.x, p[1] - m.y) < 22) hover = i; });
-    }
-    cv.style.cursor = hover >= 0 || shover >= 0 ? 'pointer' : 'default';
-    ctx.font = '300 italic 13px Spectral, Georgia, serif';
-    sats.forEach((p, i) => {
-      const on = shover === i;
-      ctx.fillStyle = rgba(pal.ink, on ? 1 : 0.35 + 0.4 * w); ctx.beginPath(); ctx.arc(p[0], p[1], on ? 3 : 2, 0, 6.283); ctx.fill();
-      if (on) { ctx.fillStyle = pal.ink; ctx.fillText(SATS[i].title, p[0] + 8, p[1] + 16); }
-    });
-    ctx.font = `300 italic ${mobile ? 13 : 14}px Spectral, Georgia, serif`;
-    labels.forEach((p, i) => {
-      const active = SECS[i][0] === nav.page, hot = hover === i || active;
-      ctx.strokeStyle = hot ? pal.ink : rgba(pal.ink, 0.55); ctx.fillStyle = pal.bg; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.arc(p[0], p[1], active ? 5 : 3.5, 0, 6.283); ctx.fill(); ctx.stroke();
-      ctx.fillStyle = hot ? pal.ink : pal.muted; ctx.fillText(SECS[i][1], p[0] + 10, p[1] - 8);
-    });
-    const hd = proj(q); ctx.fillStyle = pal.ink; ctx.beginPath(); ctx.arc(hd[0], hd[1], 3.2, 0, 6.283); ctx.fill();
-    if (!mobile) {
-      coord.textContent = 'z = (' + q.map(v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2)).join(', ') + ')';
-    }
-    drawGizmo(pal, cy, sy, cp, sp);
-    requestAnimationFrame(frame);
-  }
-  const gz = document.getElementById('gz'), gctx = gz.getContext('2d');
-  (() => { const d = Math.min(devicePixelRatio || 1, 2); gz.width = 56 * d; gz.height = 44 * d; gctx.setTransform(d, 0, 0, d, 0, 0); })();
-  function drawGizmo(pal, cy, sy, cp, sp) {
-    gctx.clearRect(0, 0, 56, 44);
-    const o = [22, 24], Lx = 13;
-    gctx.font = '8px "JetBrains Mono", monospace'; gctx.lineWidth = 1;
-    [[1, 0, 0, '1'], [0, -1, 0, '2'], [0, 0, 1, '3']].forEach(([x, y, z, lb]) => {
-      const x1 = x * cy + z * sy, z1 = -x * sy + z * cy, y1 = y * cp - z1 * sp;
-      gctx.strokeStyle = rgba(pal.muted, 0.8); gctx.beginPath(); gctx.moveTo(o[0], o[1]); gctx.lineTo(o[0] + x1 * Lx, o[1] + y1 * Lx); gctx.stroke();
-      gctx.fillStyle = pal.muted; gctx.fillText('PC' + lb, o[0] + x1 * (Lx + 5) - 5, o[1] + y1 * (Lx + 5) + 3);
-    });
-  }
-  requestAnimationFrame(frame);
-
-  // ---- embedding scatters ----
-  const CENT = { mind: [0.9, 0.2, 0.1], science: [0.2, -0.7, 0.5], scifi: [-0.3, 0.6, 0.8], fiction: [-0.9, 0, -0.3], philosophy: [0, 0.8, -0.8], neuro: [0.6, 0.3, 0.2], methods: [-0.5, -0.4, -0.3] };
-  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-  const place = it => it.xyz || (CENT[it.c] || [0, 0, 0]).map(v => v + (rnd() - 0.5) * 0.55);
-  const esc = t => t.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
-  function scatter(cv, items, onHover) {
-    const pts = items.map(place), ctx2 = cv.getContext('2d'), st = { hl: -1, hov: -1, yaw: 0.5, W: 0, H: 0, mx: -1, my: -1 };
-    let proj = [];
-    cv.addEventListener('mousemove', e => { const r = cv.getBoundingClientRect(); st.mx = e.clientX - r.left; st.my = e.clientY - r.top; });
-    cv.addEventListener('mouseleave', () => { st.mx = -1; if (st.hov >= 0) { st.hov = -1; onHover(-1); } });
-    cv.addEventListener('click', () => { const it = items[st.hov]; if (it && it.href) location.href = it.href; });
-    function tick() {
-      if (cv.offsetWidth && cv.offsetParent) {
-        const d = Math.min(devicePixelRatio || 1, 2);
-        if (st.W !== cv.offsetWidth || st.H !== cv.offsetHeight) { st.W = cv.offsetWidth; st.H = cv.offsetHeight; cv.width = st.W * d; cv.height = st.H * d; ctx2.setTransform(d, 0, 0, d, 0, 0); }
-        const pal = PAL[document.documentElement.dataset.theme] || PAL.light, W2 = st.W, H2 = st.H;
-        if (st.mx < 0 && !reduce) st.yaw += 0.003; else if (st.mx >= 0) st.yaw += ((st.mx / W2 - 0.5) * 0.02);
-        const c = Math.cos(st.yaw), s2 = Math.sin(st.yaw), cp2 = Math.cos(0.35), sp2 = Math.sin(0.35), S2 = Math.min(W2, H2) * 0.36;
-        proj = pts.map(([x, y, z]) => { const x1 = x * c + z * s2, z1 = -x * s2 + z * c, y1 = y * cp2 - z1 * sp2, z2 = y * sp2 + z1 * cp2, f = 3 / (3 + z2); return [W2 / 2 + x1 * S2 * f, H2 / 2 + y1 * S2 * f, z2]; });
-        let hv = -1, bd = 10;
-        if (st.mx >= 0) proj.forEach((p, i) => { if (st.match && !st.match(i)) return; const dd = Math.hypot(p[0] - st.mx, p[1] - st.my); if (dd < bd) { bd = dd; hv = i; } });
-        if (hv !== st.hov) { st.hov = hv; onHover(hv); }
-        cv.style.cursor = hv >= 0 && items[hv].href ? 'pointer' : 'default';
-        ctx2.clearRect(0, 0, W2, H2);
-        const order = proj.map((p, i) => i).sort((a, b) => proj[b][2] - proj[a][2]);
-        const act = st.hov >= 0 ? st.hov : st.hl;
-        order.forEach(i => { const p = proj[i], ok = !st.match || st.match(i); ctx2.fillStyle = rgba(pal.ink, ok ? 0.3 + 0.55 * (1 - (p[2] + 1.3) / 2.6) : 0.07); ctx2.beginPath(); ctx2.arc(p[0], p[1], items.length < 8 ? 3.5 : 2.4, 0, 6.283); ctx2.fill(); });
-        if (act >= 0) {
-          const p = proj[act]; ctx2.strokeStyle = pal.ink; ctx2.lineWidth = 1; ctx2.beginPath(); ctx2.arc(p[0], p[1], 7, 0, 6.283); ctx2.stroke();
-          ctx2.font = '400 13px Spectral, Georgia, serif'; const txt = items[act].t, tw = ctx2.measureText(txt).width;
-          let tx = p[0] + 12; if (tx + tw > W2 - 6) tx = p[0] - 12 - tw; const ty = Math.max(16, Math.min(H2 - 8, p[1] + 4));
-          ctx2.fillStyle = rgba(pal.bg, 0.85); ctx2.fillRect(tx - 4, ty - 13, tw + 8, 18); ctx2.fillStyle = pal.ink; ctx2.fillText(txt, tx, ty);
-        }
-      }
-      requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-    return st;
-  }
-  function linkList(container, sel, st, items) {
-    const els = container.querySelectorAll(sel);
-    els.forEach((el, k) => { const i = +el.dataset.i; el.addEventListener('mouseenter', () => { st.hl = i; }); el.addEventListener('mouseleave', () => { st.hl = -1; }); });
-    return i => els.forEach(el => el.classList.toggle('hl', +el.dataset.i === i));
-  }
-  const P2 = window.POSTS || [], B2 = window.BOOKS || [], PH = window.PHOTOS || [];
-  const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const fmt = ym => { const [y, mo] = (ym || '').split('-'); return mo ? MON[+mo - 1] + ' ' + y : (y || ''); };
-  const KIND = {
-    posts: { items: P2, when: p => p.date, noun: ['post', 'posts'] },
-    books: { items: B2, when: b => b.read, noun: ['book', 'books'] },
-    photos: { items: PH, when: p => p.date, noun: ['photo', 'photos'] }
-  };
-  const F = { posts: { tags: new Set(), year: null }, books: { tags: new Set(), year: null }, photos: { tags: new Set(), year: null } };
-  Object.keys(KIND).forEach(k => { const has = KIND[k].items.length > 0; document.querySelector('[data-soon="' + k + '"]').style.display = has ? 'none' : ''; document.querySelector('[data-live="' + k + '"]').style.display = has ? 'flex' : 'none'; });
-  const match = (k, it) => { const f = F[k]; if (f.year && !(KIND[k].when(it) || '').startsWith(f.year)) return false; if (f.tags.size && !(it.tags || []).some(t => f.tags.has(t))) return false; return true; };
-  function chipsHTML(k) {
-    const items = KIND[k].items, f = F[k];
-    const tags = [...new Set(items.flatMap(i => i.tags || []))].sort((x, y) => items.filter(i => (i.tags || []).includes(y)).length - items.filter(i => (i.tags || []).includes(x)).length);
-    const yrs = [...new Set(items.map(i => (KIND[k].when(i) || '').slice(0, 4)).filter(Boolean))].sort().reverse();
-    const any = f.tags.size || f.year;
-    return '<div class="chips">' + tags.map(t => '<button class="chip' + (f.tags.has(t) ? ' on' : '') + '" data-k="' + k + '" data-tag="' + t + '">#' + t + '</button>').join('') + '</div>' +
-      '<div class="chips">' + yrs.map(y => '<button class="chip' + (f.year === y ? ' on' : '') + '" data-k="' + k + '" data-year="' + y + '">' + y + '</button>').join('') + (any ? '<button class="chip clear" data-k="' + k + '" data-clear="1">clear</button>' : '') + '</div>';
-  }
-  const ST = {};
-  function refresh(k) {
-    const items = KIND[k].items, n = items.filter(it => match(k, it)).length, nn = KIND[k].noun;
-    const cnt = (n === items.length ? '' : n + ' of ') + items.length + ' ' + nn[items.length === 1 ? 0 : 1];
-    $('#' + k + 'Count').textContent = cnt;
-    $('#f' + k).innerHTML = chipsHTML(k);
-    if (k === 'posts') {
-      const rows = P2.map((p, i) => match('posts', p) ? '<a class="entry" data-i="' + i + '" href="' + p.href + '"><span class="d">' + fmt(p.date) + '</span><span><span class="et">' + esc(p.t) + '</span><span class="es">' + esc(p.tldr) + '</span><span class="meta2">' + (p.tags || []).map(t => '#' + t).join(' ') + '</span></span></a>' : '').join('');
-      $('#postsList').innerHTML = rows || '<div class="none">No posts match.</div>';
-    } else if (k === 'photos') {
-      const rows = PH.map((p, i) => match('photos', p) ? '<a class="entry" style="display:block;padding:0;border:0" data-i="' + i + '" href="' + p.src + '" target="_blank"><img src="' + p.src + '" alt="' + esc(p.t || '') + '" loading="lazy"></a>' : '').join('');
-      $('#photosList').innerHTML = rows || '<div class="none">No photos match.</div>';
-    } else {
-      const rows = B2.map((b, i) => b.note && match('books', b) ? '<div class="entry" data-i="' + i + '" style="grid-template-columns:1fr"><span><span class="et">' + esc(b.t) + '</span><span class="ea">' + esc(b.a) + '</span><span class="es">' + esc(b.note) + '</span><span class="meta2">read ' + fmt(b.read) + ' · ' + (b.tags || []).map(t => '#' + t).join(' ') + '</span></span></div>' : '').join('');
-      $('#booksList').innerHTML = rows || '<div class="none">No notes match these filters.</div>';
-    }
-    const st = ST[k]; st.match = i => match(k, items[i]);
-    const list = $('#' + k + 'List');
-    list.querySelectorAll('.entry').forEach(el => { const i = +el.dataset.i; el.addEventListener('mouseenter', () => { st.hl = i; }); el.addEventListener('mouseleave', () => { st.hl = -1; }); });
-    ST[k].hlList = i => list.querySelectorAll('.entry').forEach(el => el.classList.toggle('hl', +el.dataset.i === i));
-    if (dkind === k) { $('#fdrawer').innerHTML = chipsHTML(k); renderDrawer(); }
-  }
-  document.addEventListener('click', e => {
-    const c = e.target.closest('.chip'); if (!c) return;
-    const k = c.dataset.k, f = F[k];
-    if (c.dataset.tag) { f.tags.has(c.dataset.tag) ? f.tags.delete(c.dataset.tag) : f.tags.add(c.dataset.tag); }
-    else if (c.dataset.year) f.year = f.year === c.dataset.year ? null : c.dataset.year;
-    else if (c.dataset.clear) { f.tags.clear(); f.year = null; }
-    refresh(k);
-  });
-  ST.posts = scatter($('#embPosts'), P2, i => ST.posts.hlList && ST.posts.hlList(i));
-  ST.books = scatter($('#embBooks'), B2, i => ST.books.hlList && ST.books.hlList(i));
-  ST.photos = scatter($('#embPhotos'), PH, i => ST.photos.hlList && ST.photos.hlList(i));
-
-  // ---- all-titles drawer ----
-  const drawer = $('#drawer'), dlist = $('#dlist'), dfilter = $('#dfilter');
-  let dkind = null;
-  function renderDrawer() {
-    const q = dfilter.value.trim().toLowerCase(), k = dkind;
-    const src = KIND[k].items.map((it, i) => ({ i, it, t: it.t, s: k === 'books' ? it.a : fmt(it.date), href: it.href || it.src })).filter(x => match(k, x.it));
-    const rows = src.filter(x => !q || (x.t + ' ' + x.s).toLowerCase().includes(q)).sort((a, b) => a.t.localeCompare(b.t));
-    dlist.innerHTML = rows.map(x => (x.href ? '<a href="' + x.href + '"' : '<div') + ' data-i="' + x.i + '">' + esc(x.t) + '<span class="au">' + esc(x.s) + '</span>' + (x.href ? '</a>' : '</div>')).join('') || '<div class="au">No matches.</div>';
-    $('#dtitle').textContent = ({ books: 'All books', posts: 'All writings', photos: 'All photos' })[k] + ' · ' + rows.length;
-    const st = ST[k];
-    dlist.querySelectorAll('[data-i]').forEach(el => { el.addEventListener('mouseenter', () => { st.hl = +el.dataset.i; }); el.addEventListener('mouseleave', () => { st.hl = -1; }); });
-  }
-  function openDrawer(kind) { dkind = kind; dfilter.value = ''; $('#fdrawer').innerHTML = chipsHTML(kind); renderDrawer(); drawer.classList.add('on'); drawer.setAttribute('aria-hidden', 'false'); }
-  function closeDrawer() { drawer.classList.remove('on'); drawer.setAttribute('aria-hidden', 'true'); dkind = null; }
-  refresh('posts'); refresh('books'); refresh('photos');
-  document.querySelectorAll('[data-all]').forEach(b => b.addEventListener('click', () => openDrawer(b.dataset.all)));
-  $('#dclose').addEventListener('click', closeDrawer);
-  dfilter.addEventListener('input', renderDrawer);
-  addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
-  addEventListener('hashchange', closeDrawer);
-  const MAIL = 'aliao3@andrew.cmu.edu';
-  $('#copyMail').addEventListener('click', e => { navigator.clipboard && navigator.clipboard.writeText(MAIL).then(() => { e.target.textContent = 'copied'; setTimeout(() => { e.target.textContent = 'copy'; }, 1500); }); });
-  $('#contactForm').addEventListener('submit', e => {
-    e.preventDefault(); const f = new FormData(e.target);
-    const subj = f.get('subject') || ('Hello from ' + (f.get('name') || 'your website'));
-    const body = f.get('message') + (f.get('name') ? '\n\n— ' + f.get('name') : '');
-    location.href = 'mailto:' + MAIL + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body);
-  });
-})();
-</script>
+<script src="assets/site.js"></script>
 </body>
 </html>

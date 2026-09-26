@@ -41,6 +41,12 @@ figcaption{margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:11.5
 .reply{margin-top:56px;font-size:18px;line-height:1.6;color:var(--muted)}
 .reply a{color:var(--ink)}
 .end{margin-top:64px;padding-top:18px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:16px;color:var(--muted)}
+.prose a.wl{text-decoration-style:dotted;text-decoration-color:var(--muted)}
+.wl.missing{color:var(--muted);border-bottom:1px dashed var(--rule)}
+.backlinks{margin-top:56px;display:flex;flex-direction:column}
+.backlinks .k{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-bottom:10px;border-bottom:1px solid var(--rule)}
+.backlinks a{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:12px 0;border-bottom:1px solid var(--rule);font-size:17px}
+.backlinks .kd{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
 .note{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);margin-top:10px}
 @media (max-width:760px){
   header{padding:20px 22px}
