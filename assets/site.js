@@ -11,55 +11,67 @@
   const cv = $('#m'), ctx = cv.getContext('2d'), home = $('#home'), coord = $('#coord'), main = $('#main'), stage = $('#stage');
   const secEls = SECS.map(s => document.getElementById(s[0]));
 
-  // Closed curves t ∈ [0, 2π). Each is rescaled so its x–z extent is ±1.
+  // Closed curves t ∈ [0, 2π). 3D shapes are rescaled so their x–z extent is ±1.
+  // nd: true → defined in up to 6 dimensions and shown through a slowly rotating 3D projection.
+  const D = 6, R2 = Math.SQRT1_2;
   const SHAPES = {
-    trefoil: t => { const r = 2 + Math.cos(3 * t); return [r * Math.cos(2 * t), Math.sin(3 * t) * 1.2, r * Math.sin(2 * t)]; },
-    ring: t => [Math.cos(t), 0.12 * Math.sin(3 * t), Math.sin(t)],
-    saddle: t => [Math.cos(t), 0.42 * Math.cos(2 * t), Math.sin(t)],
-    'figure-8': t => [Math.sin(t), 0.35 * Math.cos(t), 0.55 * Math.sin(2 * t)],
-    coil: t => { const r = 1 + 0.18 * Math.cos(9 * t); return [r * Math.cos(t), 0.18 * Math.sin(9 * t), r * Math.sin(t)]; },
-    'knot 2·5': t => { const r = 2 + Math.cos(5 * t); return [r * Math.cos(2 * t), Math.sin(5 * t) * 0.9, r * Math.sin(2 * t)]; }
+    'clifford 4D': { nd: true, f: t => [R2 * Math.cos(2 * t), R2 * Math.sin(3 * t), R2 * Math.sin(2 * t), R2 * Math.cos(3 * t)] },
+    'rotation 6D': { nd: true, f: t => [Math.cos(t), 0.6 * Math.cos(2 * t + 0.4), Math.sin(t), 0.6 * Math.sin(2 * t + 0.4), 0.45 * Math.cos(3 * t + 1.1), 0.45 * Math.sin(3 * t + 1.1)] },
+    'twist 5D': { nd: true, f: t => [Math.cos(t), 0.5 * Math.sin(2 * t), Math.sin(t), 0.7 * Math.cos(3 * t), 0.7 * Math.sin(3 * t)] }
   };
   const SHAPE_KEYS = Object.keys(SHAPES);
-  let shapeName = new URLSearchParams(location.search).get('shape') || localStorage.getItem('al-shape') || 'trefoil';
-  if (!SHAPES[shapeName]) shapeName = 'trefoil';
-  let curve, cloud, line, curA, curB, mix = 1, m0 = 0;
+  let shapeName = new URLSearchParams(location.search).get('shape') || localStorage.getItem('al-shape') || 'clifford 4D';
+  if (!SHAPES[shapeName]) shapeName = 'clifford 4D';
+  let curve, cloud, line, curA, curB, mix = 1, m0 = 0, ndA = 0, ndB = 0, ndW = 0, phi = 0, lastMeta = 0;
   const gauss = () => { let u = 0; while (!u) u = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.283 * Math.random()); };
-  const seeds = Array.from({ length: 1400 }, () => ({ t: Math.random() * 6.283, n: [gauss() * 0.07, gauss() * 0.07, gauss() * 0.07] }));
-  const norm = f => {
-    const S = Array.from({ length: 400 }, (_, i) => f(i / 400 * 6.283));
-    const c = [0, 1, 2].map(k => S.reduce((a, p) => a + p[k], 0) / S.length);
-    const k = 1 / Math.max(...S.map(p => Math.max(Math.abs(p[0] - c[0]), Math.abs(p[2] - c[2]))));
+  const seeds = Array.from({ length: 1120 }, () => ({ t: Math.random() * 6.283, n: Array.from({ length: D }, () => gauss() * 0.07) }));
+  const pad = v => { const o = v.slice(); while (o.length < D) o.push(0); return o; };
+  const norm = sh => {
+    const f = t => pad(sh.f(t)), S = Array.from({ length: 400 }, (_, i) => f(i / 400 * 6.283));
+    const c = Array.from({ length: D }, (_, k) => S.reduce((a, p) => a + p[k], 0) / S.length);
+    const k = sh.nd ? 1.15 / Math.max(...S.map(p => Math.hypot(...p.map((v, j) => v - c[j]))))
+                    : 1 / Math.max(...S.map(p => Math.max(Math.abs(p[0] - c[0]), Math.abs(p[2] - c[2]))));
     return t => f(t).map((v, j) => (v - c[j]) * k);
   };
   const ease = x => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
-  curve = t => { const b = curB(t); if (mix >= 1) return b; const a = curA(t), e = ease(mix); return a.map((v, j) => v + (b[j] - v) * e); };
+  const PLANES = [[0, 3, 1], [1, 4, 0.7], [2, 5, 1.3], [0, 4, 0.45]];
+  function project(v) {
+    if (ndW > 0) { v = v.slice(); for (const [i, j, r] of PLANES) { const a = phi * r * ndW, c = Math.cos(a), s = Math.sin(a), x = v[i], y = v[j]; v[i] = x * c - y * s; v[j] = x * s + y * c; } }
+    return [v[0], v[1] * (1 - 0.5 * ndW), v[2]];
+  }
+  const curveND = t => { const b = curB(t); if (mix >= 1) return b; const a = curA(t), e = ease(mix); return a.map((v, j) => v + (b[j] - v) * e); };
+  curve = t => project(curveND(t));
   function rebuild() {
-    cloud = seeds.map(c => curve(c.t).map((x, j) => x + c.n[j]));
+    cloud = seeds.map(c => project(curveND(c.t).map((x, j) => x + c.n[j])));
     line = Array.from({ length: 500 }, (_, i) => curve(i / 499 * 6.283));
-    if (window.__secReady) secEls.forEach((el, i) => { const q = curve(T[i]); el.querySelector('.meta').textContent = 'PC1 ' + q[0].toFixed(2) + ' · PC2 ' + q[1].toFixed(2) + ' · PC3 ' + q[2].toFixed(2); });
+    const now = performance.now();
+    if (window.__secReady && (mix < 1 || now - lastMeta > 400 || !lastMeta)) { lastMeta = now; secEls.forEach((el, i) => { const q = curve(T[i]); el.querySelector('.meta').textContent = 'PC1 ' + q[0].toFixed(2) + ' · PC2 ' + q[1].toFixed(2) + ' · PC3 ' + q[2].toFixed(2); }); }
   }
   function movePill() {
     const b = document.querySelector('#shapes button.on'), p = document.querySelector('#shapes .pill'); if (!b || !p) return;
     p.style.left = b.offsetLeft + 'px'; p.style.top = b.offsetTop + 'px'; p.style.width = b.offsetWidth + 'px'; p.style.height = b.offsetHeight + 'px';
   }
   function setShape(name, instant) {
-    shapeName = name; const nf = norm(SHAPES[name]);
-    if (!curB || instant || reduce) { curA = curB = nf; mix = 1; }
-    else { const pA = curA, pB = curB, pm = mix; curA = pm >= 1 ? pB : (t => { const a = pA(t), b = pB(t), e = ease(pm); return a.map((v, j) => v + (b[j] - v) * e); }); curB = nf; mix = 0; m0 = performance.now(); }
+    shapeName = name; const nf = norm(SHAPES[name]), nd = SHAPES[name].nd ? 1 : 0;
+    if (!curB || instant || reduce) { curA = curB = nf; mix = 1; ndA = ndB = ndW = nd; }
+    else { ndA = ndW; ndB = nd; const pA = curA, pB = curB, pm = mix; curA = pm >= 1 ? pB : (t => { const a = pA(t), b = pB(t), e = ease(pm); return a.map((v, j) => v + (b[j] - v) * e); }); curB = nf; mix = 0; m0 = performance.now(); }
     rebuild();
     document.querySelectorAll('#shapes button').forEach(b => b.classList.toggle('on', b.dataset.shape === name));
     movePill();
   }
   let pk = { x: null, y: null };
   function placePicker(cx, yMax) {
-    const el = document.getElementById('shapes'); if (!el) return;
+    const el = document.getElementById('coord'); if (!el) return;
     if (mobile) { if (pk.x !== null) { el.style.transform = ''; pk = { x: null, y: null }; } return; }
     const tx = Math.max(24, Math.min(W - el.offsetWidth - 24, cx - el.offsetWidth / 2)), ty = Math.min(H - 84, yMax + 34);
     pk.x = pk.x === null ? tx : pk.x + (tx - pk.x) * 0.2; pk.y = pk.y === null ? ty : pk.y + (ty - pk.y) * 0.2;
     el.style.transform = 'translate(' + pk.x.toFixed(1) + 'px,' + pk.y.toFixed(1) + 'px)';
   }
-  function morphTick() { if (mix >= 1) return; mix = Math.min(1, (performance.now() - m0) / 900); rebuild(); }
+  function morphTick() {
+    if (mix < 1) { mix = Math.min(1, (performance.now() - m0) / 900); ndW = ndA + (ndB - ndA) * ease(mix); }
+    if (ndW > 0 && !reduce) phi += 0.0042;
+    if (mix < 1 || ndW > 0) rebuild();
+  }
   setShape(shapeName, true);
   const T = SECS.map((_, i) => i / SECS.length * 6.283 + 0.35);
   const ang = (a, b) => { let d = (a - b) % 6.283; if (d > Math.PI) d -= 6.283; if (d < -Math.PI) d += 6.283; return d; };
@@ -125,7 +137,7 @@
   const nav = { phase: 0.35, w: 0, yaw: 0.4, pitch: 0.45, auto: 0.4, active: null, uy: 0, up: 0 };
   const rot = { on: false, x: 0, y: 0, moved: false };
   cv.addEventListener('pointerdown', e => { rot.on = true; rot.moved = false; rot.x = e.clientX; rot.y = e.clientY; cv.setPointerCapture(e.pointerId); });
-  cv.addEventListener('pointermove', e => { if (!rot.on) return; const dx = e.clientX - rot.x, dy = e.clientY - rot.y; if (!rot.moved && Math.hypot(dx, dy) < 4) return; rot.moved = true; rot.x = e.clientX; rot.y = e.clientY; nav.uy += dx * 0.008; nav.up = clamp(nav.up + dy * 0.006, -1.1, 1.1); nav.yaw += dx * 0.008; nav.pitch += dy * 0.006; });
+  cv.addEventListener('pointermove', e => { if (!rot.on) return; const dx = e.clientX - rot.x, dy = e.clientY - rot.y; if (!rot.moved && Math.hypot(dx, dy) < 4) return; rot.moved = true; rot.x = e.clientX; rot.y = e.clientY; if (ndW > 0 && (e.shiftKey || e.altKey)) { phi += (dx + dy) * 0.01; return; } nav.uy += dx * 0.008; nav.up = clamp(nav.up + dy * 0.006, -1.1, 1.1); nav.yaw += dx * 0.008; nav.pitch += dy * 0.006; });
   const rotEnd = () => { rot.on = false; setTimeout(() => { rot.moved = false; }, 0); };
   cv.addEventListener('pointerup', rotEnd); cv.addEventListener('pointercancel', rotEnd);
   let labels = [], hover = -1, sats = [], shover = -1, SAT = [];
