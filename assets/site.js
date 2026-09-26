@@ -11,14 +11,67 @@
   const cv = $('#m'), ctx = cv.getContext('2d'), home = $('#home'), coord = $('#coord'), main = $('#main'), stage = $('#stage');
   const secEls = SECS.map(s => document.getElementById(s[0]));
 
-  const curve = t => { const r = 2 + Math.cos(3 * t); return [r * Math.cos(2 * t) / 3, Math.sin(3 * t) * 0.4, r * Math.sin(2 * t) / 3]; };
+  // Closed curves t ∈ [0, 2π). Each is rescaled so its x–z extent is ±1.
+  const SHAPES = {
+    trefoil: t => { const r = 2 + Math.cos(3 * t); return [r * Math.cos(2 * t), Math.sin(3 * t) * 1.2, r * Math.sin(2 * t)]; },
+    ring: t => [Math.cos(t), 0.12 * Math.sin(3 * t), Math.sin(t)],
+    saddle: t => [Math.cos(t), 0.42 * Math.cos(2 * t), Math.sin(t)],
+    'figure-8': t => [Math.sin(t), 0.35 * Math.cos(t), 0.55 * Math.sin(2 * t)],
+    coil: t => { const r = 1 + 0.18 * Math.cos(9 * t); return [r * Math.cos(t), 0.18 * Math.sin(9 * t), r * Math.sin(t)]; },
+    'knot 2·5': t => { const r = 2 + Math.cos(5 * t); return [r * Math.cos(2 * t), Math.sin(5 * t) * 0.9, r * Math.sin(2 * t)]; }
+  };
+  const SHAPE_KEYS = Object.keys(SHAPES);
+  let shapeName = new URLSearchParams(location.search).get('shape') || localStorage.getItem('al-shape') || 'trefoil';
+  if (!SHAPES[shapeName]) shapeName = 'trefoil';
+  let curve, cloud, line, curA, curB, mix = 1, m0 = 0;
   const gauss = () => { let u = 0; while (!u) u = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.283 * Math.random()); };
-  const cloud = Array.from({ length: 1400 }, () => curve(Math.random() * 6.283).map(x => x + gauss() * 0.07));
-  const line = Array.from({ length: 500 }, (_, i) => curve(i / 499 * 6.283));
+  const seeds = Array.from({ length: 1400 }, () => ({ t: Math.random() * 6.283, n: [gauss() * 0.07, gauss() * 0.07, gauss() * 0.07] }));
+  const norm = f => {
+    const S = Array.from({ length: 400 }, (_, i) => f(i / 400 * 6.283));
+    const c = [0, 1, 2].map(k => S.reduce((a, p) => a + p[k], 0) / S.length);
+    const k = 1 / Math.max(...S.map(p => Math.max(Math.abs(p[0] - c[0]), Math.abs(p[2] - c[2]))));
+    return t => f(t).map((v, j) => (v - c[j]) * k);
+  };
+  const ease = x => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+  curve = t => { const b = curB(t); if (mix >= 1) return b; const a = curA(t), e = ease(mix); return a.map((v, j) => v + (b[j] - v) * e); };
+  function rebuild() {
+    cloud = seeds.map(c => curve(c.t).map((x, j) => x + c.n[j]));
+    line = Array.from({ length: 500 }, (_, i) => curve(i / 499 * 6.283));
+    if (window.__secReady) secEls.forEach((el, i) => { const q = curve(T[i]); el.querySelector('.meta').textContent = 'PC1 ' + q[0].toFixed(2) + ' · PC2 ' + q[1].toFixed(2) + ' · PC3 ' + q[2].toFixed(2); });
+  }
+  function movePill() {
+    const b = document.querySelector('#shapes button.on'), p = document.querySelector('#shapes .pill'); if (!b || !p) return;
+    p.style.left = b.offsetLeft + 'px'; p.style.top = b.offsetTop + 'px'; p.style.width = b.offsetWidth + 'px'; p.style.height = b.offsetHeight + 'px';
+  }
+  function setShape(name, instant) {
+    shapeName = name; const nf = norm(SHAPES[name]);
+    if (!curB || instant || reduce) { curA = curB = nf; mix = 1; }
+    else { const pA = curA, pB = curB, pm = mix; curA = pm >= 1 ? pB : (t => { const a = pA(t), b = pB(t), e = ease(pm); return a.map((v, j) => v + (b[j] - v) * e); }); curB = nf; mix = 0; m0 = performance.now(); }
+    rebuild();
+    document.querySelectorAll('#shapes button').forEach(b => b.classList.toggle('on', b.dataset.shape === name));
+    movePill();
+  }
+  let pk = { x: null, y: null };
+  function placePicker(cx, yMax) {
+    const el = document.getElementById('shapes'); if (!el) return;
+    if (mobile) { if (pk.x !== null) { el.style.transform = ''; pk = { x: null, y: null }; } return; }
+    const tx = Math.max(24, Math.min(W - el.offsetWidth - 24, cx - el.offsetWidth / 2)), ty = Math.min(H - 84, yMax + 34);
+    pk.x = pk.x === null ? tx : pk.x + (tx - pk.x) * 0.2; pk.y = pk.y === null ? ty : pk.y + (ty - pk.y) * 0.2;
+    el.style.transform = 'translate(' + pk.x.toFixed(1) + 'px,' + pk.y.toFixed(1) + 'px)';
+  }
+  function morphTick() { if (mix >= 1) return; mix = Math.min(1, (performance.now() - m0) / 900); rebuild(); }
+  setShape(shapeName, true);
   const T = SECS.map((_, i) => i / SECS.length * 6.283 + 0.35);
   const ang = (a, b) => { let d = (a - b) % 6.283; if (d > Math.PI) d -= 6.283; if (d < -Math.PI) d += 6.283; return d; };
   const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
-  secEls.forEach((el, i) => { const q = curve(T[i]); el.querySelector('.meta').textContent = 'PC1 ' + q[0].toFixed(2) + ' · PC2 ' + q[1].toFixed(2) + ' · PC3 ' + q[2].toFixed(2); });
+  window.__secReady = true;
+  const shp = $('#shapes');
+  if (shp) {
+    shp.innerHTML = '<i class="pill"></i>' + SHAPE_KEYS.map(k => '<button data-shape="' + k + '">' + k + '</button>').join('');
+    shp.addEventListener('click', e => { const b = e.target.closest('[data-shape]'); if (!b) return; localStorage.setItem('al-shape', b.dataset.shape); setShape(b.dataset.shape); });
+    addEventListener('resize', movePill); document.fonts && document.fonts.ready.then(movePill);
+  }
+  setShape(shapeName, true);
 
   // ---------- layout ----------
   let W = 0, H = 0, L = {}, mobile = false;
@@ -28,11 +81,11 @@
     W = cv.offsetWidth; H = cv.offsetHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const mn = Math.min(W, H);
     if (mobile) { const S = Math.min(W * 0.4, H * 0.62); L = { S0: S, S1: S, C: [W / 2, H / 2 + 4], C1: [W / 2, H / 2 + 4] }; return; }
-    const top = 100, bot = H - 30, hr = home.offsetLeft + home.offsetWidth + 24;
+    const top = 100, bot = H - 84, hr = home.offsetLeft + home.offsetWidth + 24;
     let S0 = Math.min((bot - top) / 1.75, W * 0.28), cx0 = Math.max(W * 0.6, hr + S0 * 1.05);
     if (cx0 + S0 * 1.05 > W - 24) { S0 = Math.max(80, (W - 24 - hr) / 2.1); cx0 = hr + S0 * 1.05; }
-    const fade = main.getBoundingClientRect().left, S1 = Math.max(70, Math.min((fade - 144) / 2.2, (H - 170) / 1.75));
-    L = { S0, S1, C: [cx0, (top + bot) / 2], C1: [(fade - 64) / 2 + 12, (H + 60) / 2] };
+    const fade = main.getBoundingClientRect().left, S1 = Math.max(70, Math.min((fade - 144) / 2.2, (H - 230) / 1.75));
+    L = { S0, S1, C: [cx0, (top + bot) / 2], C1: [(fade - 64) / 2 + 12, (H + 16) / 2] };
   }
   addEventListener('resize', resize); MQ.addEventListener && MQ.addEventListener('change', resize); resize();
 
@@ -101,6 +154,7 @@
 
   function frame() {
     if (cv.offsetWidth !== W || cv.offsetHeight !== H) resize();
+    morphTick();
     const P = pal(), sp = scrollState();
     setActive(sp.i);
     const wT = mobile ? (sp.i >= 0 ? 1 : clamp(scrollY / 160)) : clamp(scrollY / (innerHeight * 0.55));
@@ -123,7 +177,8 @@
     ctx.fillStyle = P.bg; ctx.fillRect(0, 0, W, H);
     const ds = 1.4 + w * 0.6;
     for (const c of cloud) { const [x, y, z] = proj(c); if (x < -4 || x > W + 4 || y < -4 || y > H + 4) continue; ctx.fillStyle = rgba(P.muted, 0.14 + 0.3 * (1 - (z + 1.2) / 2.4)); ctx.fillRect(x, y, ds, ds); }
-    ctx.beginPath(); line.forEach((p, i) => { const [x, y] = proj(p); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+    let yMax = 0; ctx.beginPath(); line.forEach((p, i) => { const [x, y] = proj(p); if (y > yMax) yMax = y; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+    placePicker(ox, yMax);
     ctx.strokeStyle = rgba(P.ink, 0.26); ctx.lineWidth = 1; ctx.stroke();
     const n = 90;
     for (let i = 1; i < n; i++) {

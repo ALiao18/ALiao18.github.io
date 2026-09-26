@@ -131,6 +131,11 @@ main{position:relative;z-index:1;width:var(--colw);margin-left:clamp(440px,55vw,
 .ptile .lk{margin-top:0}
 .flash{animation:flash 1.8s ease}
 @keyframes flash{0%,35%{background:var(--rule)}100%{background:transparent}}
+#shapes{position:fixed;left:0;top:0;z-index:1;display:flex;gap:2px;align-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap}
+#shapes .pill{border-radius:4px;position:absolute;left:0;top:0;width:0;height:0;background:var(--rule);transition:left .45s cubic-bezier(.3,.7,.2,1),top .45s cubic-bezier(.3,.7,.2,1),width .45s cubic-bezier(.3,.7,.2,1);pointer-events:none}
+#shapes button{border-radius:4px;position:relative;padding:4px 9px;transition:color .3s}
+#shapes button:hover{color:var(--ink)}
+#shapes button.on{color:var(--ink)}
 #coord{position:fixed;left:48px;bottom:30px;z-index:1;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);pointer-events:none}
 @media (max-width:860px){.entry{grid-template-columns:64px 1fr;gap:12px}.drawer{width:100%;border-left:0}.row{grid-template-columns:64px 1fr;gap:12px}}
 @media (max-width:860px), (max-width:1180px) and (max-aspect-ratio:4/5){
@@ -143,8 +148,13 @@ main{position:relative;z-index:1;width:var(--colw);margin-left:clamp(440px,55vw,
   main{width:auto;margin:0;padding:28px 22px 30vh;pointer-events:auto}
   .sec{padding-bottom:88px}
   .sec h2{font-size:36px}
+  #shapes{position:absolute;top:auto;left:8px;right:8px;bottom:6px;flex-wrap:wrap;justify-content:center;white-space:normal}
 }
 @media (max-height:540px) and (orientation:landscape) and (max-width:1180px){.stage{position:relative}}
+
+.chip,.allbtn,#cvq,.copy,.send{border-radius:6px}
+.portrait,.ptile img,.ph0{border-radius:6px}
+.drawer{border-radius:8px 0 0 8px}
 </style>
 </head>
 <body>
@@ -159,7 +169,7 @@ main{position:relative;z-index:1;width:var(--colw);margin-left:clamp(440px,55vw,
   </nav>
 </header>
 
-<div class="stage" id="stage"><canvas id="m" aria-label="A 3D neural manifold. Each labelled point is a section of the site; the dark point follows your scroll position."></canvas></div>
+<div class="stage" id="stage"><div id="shapes"></div><canvas id="m" aria-label="A 3D neural manifold. Each labelled point is a section of the site; the dark point follows your scroll position."></canvas></div>
 
 <div class="home" id="home"><p>Hi, I'm <a href="#about">Andrew</a>.</p></div>
 
