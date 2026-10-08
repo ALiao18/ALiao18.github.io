@@ -63,6 +63,7 @@ nav a.on{color:var(--ink)}
 .send{align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--bg);background:var(--ink);padding:8px 14px;margin-top:4px}
 .send:hover{opacity:.8}
 .mail{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;font-size:19px;font-weight:400}
+.updated{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
 .copy{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);border:1px solid var(--rule);padding:3px 8px}
 .empty{font-style:italic;color:var(--muted);font-size:18px}
 .entry{display:grid;grid-template-columns:78px 1fr;gap:16px;align-items:baseline;padding:18px 0;border-top:1px solid var(--rule)}
@@ -260,6 +261,7 @@ main{position:relative;z-index:1;width:var(--colw);margin-left:clamp(440px,55vw,
       <button class="send" type="submit">Open in email →</button>
     </form>
     <div class="links"><a class="u" href="https://github.com/ALiao18">github</a><a class="u" href="https://linkedin.com/in/aliao18">linkedin</a></div>
+    <div class="updated" id="updated"></div>
   </section>
 </main>
 
@@ -272,5 +274,16 @@ main{position:relative;z-index:1;width:var(--colw);margin-left:clamp(440px,55vw,
 </aside>
 
 <script src="assets/site.js"></script>
+<script>
+(function () {
+  const el = document.getElementById('updated');
+  const show = d => { if (!isNaN(d)) el.textContent = 'last updated ' + d.toLocaleDateString('en-CA'); };
+  show(new Date(document.lastModified));
+  fetch('https://api.github.com/repos/ALiao18/ALiao18.github.io/commits?per_page=1')
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(c => show(new Date(c[0].commit.committer.date)))
+    .catch(() => {});
+})();
+</script>
 </body>
 </html>
