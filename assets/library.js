@@ -15,15 +15,9 @@
 // Entries marked placeholder: true are layout stand-ins. While a list has only placeholders,
 // its section also shows "Coming soon!". Delete them when you add real entries.
 
-window.POSTS = [1, 2, 3].map(n => ({
-  id: 'writing-' + n, t: 'Writing ' + n, date: '2026-0' + (n + 3), tags: ['tag ' + n], c: ['neuro', 'methods', 'philosophy'][n - 1],
-  tldr: 'One-line summary.', links: ['book-' + n, 'photo-' + n], placeholder: true
-}));
+window.POSTS = [];
 
-window.BOOKS = [1, 2, 3].map(n => ({
-  id: 'book-' + n, t: 'Book ' + n, a: 'Author', read: '2026-0' + (n + 3), tags: ['tag ' + n], c: ['science', 'mind', 'fiction'][n - 1],
-  note: 'Short note.', links: n < 3 ? ['book-' + (n + 1)] : [], placeholder: true
-}));
+window.BOOKS = [];
 
 window.PHOTOS = [1, 2, 3].map(n => ({
   id: 'photo-' + n, t: 'Photo ' + n, date: '2026-0' + (n + 3), tags: ['tag ' + n], c: ['scifi', 'fiction', 'science'][n - 1],
