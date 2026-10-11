@@ -19,7 +19,11 @@ window.POSTS = [];
 
 window.BOOKS = [];
 
-window.PHOTOS = [1, 2, 3].map(n => ({
-  id: 'photo-' + n, t: 'Photo ' + n, date: '2026-0' + (n + 3), tags: ['tag ' + n], c: ['scifi', 'fiction', 'science'][n - 1],
-  links: n < 3 ? ['photo-' + (n + 1)] : [], placeholder: true
-}));
+// St. George Marathon & Zion trip, Oct 2026. Linked in story order: Zion → race-morning start → on the course.
+window.PHOTOS = [
+  { id: 'zion-dusk', t: 'Zion at dusk', src: 'photos/zion-dusk.jpg', date: '2026-10', tags: ['zion'], c: 'landscape', links: ['night-sky'] },
+  { id: 'night-sky', t: 'Milky Way', src: 'photos/night-sky.jpg', date: '2026-10', tags: ['zion'], c: 'landscape', links: ['start-wait'] },
+  { id: 'start-wait', t: 'Waiting for the start', src: 'photos/start-wait.jpg', date: '2026-10', tags: ['st george marathon'], c: 'running', links: ['start-fire'] },
+  { id: 'start-fire', t: 'Bonfire at the start line', src: 'photos/start-fire.jpg', date: '2026-10', tags: ['st george marathon'], c: 'running', links: ['on-course'] },
+  { id: 'on-course', t: 'On the course', src: 'photos/on-course.jpg', date: '2026-10', tags: ['st george marathon'], c: 'running', links: [] }
+];

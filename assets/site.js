@@ -298,7 +298,7 @@
   let dragging = false;
 
   // ---------- section graph views ----------
-  const CENT = { mind: [0.9, 0.2, 0.1], science: [0.2, -0.7, 0.5], scifi: [-0.3, 0.6, 0.8], fiction: [-0.9, 0, -0.3], philosophy: [0, 0.8, -0.8], neuro: [0.6, 0.3, 0.2], methods: [-0.5, -0.4, -0.3] };
+  const CENT = { mind: [0.9, 0.2, 0.1], science: [0.2, -0.7, 0.5], scifi: [-0.3, 0.6, 0.8], fiction: [-0.9, 0, -0.3], philosophy: [0, 0.8, -0.8], neuro: [0.6, 0.3, 0.2], methods: [-0.5, -0.4, -0.3], running: [0.5, -0.5, -0.6], landscape: [-0.6, -0.6, 0.4] };
   const XYZ = N0.map(n => { if (n.it.xyz) return n.it.xyz; const h = hash4(n.id + '#'); return (CENT[n.it.c] || [0, 0, 0]).map((v, k) => v + (h[k] - 0.5) * 0.55); });
   const VIEWS = [];
   function makeView(kind) {

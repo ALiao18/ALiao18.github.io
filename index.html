@@ -63,7 +63,8 @@ nav a.on{color:var(--ink)}
 .send{align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--bg);background:var(--ink);padding:8px 14px;margin-top:4px}
 .send:hover{opacity:.8}
 .mail{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;font-size:19px;font-weight:400}
-.updated{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+.nameblk{display:flex;flex-direction:column;gap:2px}
+.updated{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);font-weight:300}
 .copy{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);border:1px solid var(--rule);padding:3px 8px}
 .empty{font-style:italic;color:var(--muted);font-size:18px}
 .entry{display:grid;grid-template-columns:78px 1fr;gap:16px;align-items:baseline;padding:18px 0;border-top:1px solid var(--rule)}
@@ -161,7 +162,7 @@ main{position:relative;z-index:1;width:var(--colw);margin-left:clamp(440px,55vw,
 <body>
 <header>
   <div class="hrow">
-    <div class="brand"><a class="name" href="#" data-top>Andrew Liao<span class="zh" lang="zh-Hant">廖英劭</span></a><canvas id="gz" width="56" height="44" aria-hidden="true"></canvas></div>
+    <div class="brand"><div class="nameblk"><a class="name" href="#" data-top>Andrew Y.S. Liao<span class="zh" lang="zh-Hant">廖英劭</span></a><div class="updated" id="updated"></div></div><canvas id="gz" width="56" height="44" aria-hidden="true"></canvas></div>
     <button class="theme theme-m" aria-label="Toggle theme"></button>
   </div>
   <nav id="nav">
@@ -189,7 +190,7 @@ main{position:relative;z-index:1;width:var(--colw);margin-left:clamp(440px,55vw,
     <div class="bio">
       <p>Hi, my name is Andrew Liao (<span lang="zh-Hant">廖英劭</span>). I am an M.S. student in AI Engineering at Carnegie Mellon University, advised by Byron Yu. My research interests include brain-computer interfaces (BCIs), neural decoding, and machine learning.</p>
       <p>Prior to CMU, I studied Computer and Data Science at New York University's Courant Institute. I have also been fortunate to work with Sage (Zhe) Chen, Joaquin Gonzalez, and Laura Gould.</p>
-      <p>I am currently seeking internship opportunities for Summer 2027.</p>
+      <p>I am currently seeking internship opportunities for Summer 2027 in machine learning, software engineering, or neural engineering.</p>
     </div>
   </section>
   <section class="sec" id="news">
@@ -258,7 +259,6 @@ main{position:relative;z-index:1;width:var(--colw);margin-left:clamp(440px,55vw,
       <button class="send" type="submit">Open in email →</button>
     </form>
     <div class="links"><a class="u" href="https://github.com/ALiao18">github</a><a class="u" href="https://linkedin.com/in/aliao18">linkedin</a></div>
-    <div class="updated" id="updated"></div>
   </section>
 </main>
 
