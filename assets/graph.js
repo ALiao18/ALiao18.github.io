@@ -1,7 +1,7 @@
 // Builds the link graph shared by the home page and post pages.
 // Edges come from `links: [...]` in library.js and from [[id]] / [[id|text]] inside post HTML.
 window.SiteGraph = (function () {
-  var KINDS = { posts: 'POSTS', books: 'BOOKS', photos: 'PHOTOS' };
+  var KINDS = { posts: 'POSTS', books: 'BOOKS' };
   var RX = /\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g;
   function nodes() {
     var out = [];

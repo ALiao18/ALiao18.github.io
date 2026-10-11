@@ -122,15 +122,27 @@ main{position:relative;z-index:1;width:var(--colw);margin-left:clamp(440px,55vw,
 .lk{display:flex;flex-wrap:wrap;gap:4px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:8px}
 .lk button{color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--rule)}
 .lk button:hover{text-decoration-color:var(--ink)}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:18px 14px}
-.ptile{margin:0;display:flex;flex-direction:column;gap:6px;align-items:stretch!important}
 .bar .chips{flex-wrap:nowrap;flex:none}
-.ptile .pimg{cursor:pointer}
-.ptile img,.ptile .ph0{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;background:var(--rule)}
-.ph0{display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted)}
-.ptile figcaption{font-size:14.5px;line-height:1.35}
-.ptile.hl figcaption{text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--muted)}
-.ptile .lk{margin-top:0}
+.events{display:flex;flex-direction:column;gap:32px}
+.evh{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:10px;margin-bottom:14px;border-bottom:1px solid var(--rule)}
+.evh .et{font-size:19px}
+.prow{display:flex;gap:10px;height:clamp(220px,34vh,300px)}
+.prow+.prow{margin-top:14px}
+.ptile{flex:1 1 0;min-width:0;margin:0;display:flex;flex-direction:column;gap:6px;cursor:zoom-in;transition:flex-grow .5s cubic-bezier(.2,.7,.2,1)}
+.ptile.sp{visibility:hidden;pointer-events:none}
+.ptile img{flex:1;min-height:0;width:100%;object-fit:cover;display:block;background:var(--rule);border-radius:6px}
+.ptile figcaption{font-size:14px;line-height:1.3;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .3s}
+@media (hover:hover){.ptile:hover{flex-grow:2.6}.ptile:hover figcaption{color:var(--ink)}}
+.lb{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;gap:12px;padding:56px 16px 24px;background:color-mix(in srgb,var(--bg) 94%,transparent);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
+.lb.on{opacity:1;visibility:visible}
+.lb figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:10px;min-width:0;max-height:100%}
+.lb img{max-width:min(calc(100vw - 120px),1100px);max-height:calc(100vh - 140px);object-fit:contain;display:block;border-radius:6px}
+.lb figcaption{font-size:16px;text-align:center}
+.lb figcaption .d{margin-left:10px}
+.lb button{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);padding:10px}
+.lb button:hover{color:var(--ink)}
+.lbx{position:absolute;top:18px;right:20px}
+@media (max-width:860px){.lb img{max-width:calc(100vw - 32px);max-height:calc(100vh - 190px)}#lbp,#lbn{position:absolute;bottom:20px}#lbp{left:16px}#lbn{right:16px}}
 .flash{animation:flash 1.8s ease}
 @keyframes flash{0%,35%{background:var(--rule)}100%{background:transparent}}
 #shapes{position:fixed;left:44px;bottom:22px;z-index:4;display:flex;gap:2px;align-items:center;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
@@ -155,7 +167,7 @@ main{position:relative;z-index:1;width:var(--colw);margin-left:clamp(440px,55vw,
 @media (max-height:540px) and (orientation:landscape) and (max-width:1180px){.stage{position:relative}}
 
 .chip,.allbtn,#cvq,.copy,.send{border-radius:6px}
-.portrait,.ptile img,.ph0{border-radius:6px}
+.portrait{border-radius:6px}
 .drawer{border-radius:8px 0 0 8px}
 </style>
 </head>
@@ -225,11 +237,9 @@ main{position:relative;z-index:1;width:var(--colw);margin-left:clamp(440px,55vw,
     <div class="meta"></div><h2>Photos</h2>
     <div class="empty" data-soon="photos">Coming soon!</div>
     <div class="stack" data-live="photos">
-      <div class="bar"><span class="d" id="photosCount"></span><span class="chips"><button class="allbtn" data-mode="photos">PCA view</button><button class="allbtn" data-all="photos">All photos →</button></span></div>
+      <div class="bar"><span class="d" id="photosCount"></span><span class="chips"><button class="allbtn" data-all="photos">All photos →</button></span></div>
       <div class="filters" id="fphotos"></div>
-      <canvas class="emb" id="gphotos"></canvas>
-      <div class="cap2" data-cap="photos"></div>
-      <div class="pgrid" id="photosList"></div>
+      <div class="events" id="photosList"></div>
     </div>
   </section>
   <section class="sec" id="cv">
@@ -269,6 +279,13 @@ main{position:relative;z-index:1;width:var(--colw);margin-left:clamp(440px,55vw,
   <div class="filters" id="fdrawer" style="margin:0 0 18px"></div>
   <div class="dlist" id="dlist"></div>
 </aside>
+
+<div class="lb" id="lb" aria-hidden="true" role="dialog" aria-label="Photo viewer">
+  <button class="lbx" id="lbx">close ×</button>
+  <button id="lbp" aria-label="Previous photo">←</button>
+  <figure><img id="lbimg" alt=""><figcaption id="lbcap"></figcaption></figure>
+  <button id="lbn" aria-label="Next photo">→</button>
+</div>
 
 <script src="assets/site.js"></script>
 <script>

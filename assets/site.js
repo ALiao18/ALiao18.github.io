@@ -298,7 +298,7 @@
   let dragging = false;
 
   // ---------- section graph views ----------
-  const CENT = { mind: [0.9, 0.2, 0.1], science: [0.2, -0.7, 0.5], scifi: [-0.3, 0.6, 0.8], fiction: [-0.9, 0, -0.3], philosophy: [0, 0.8, -0.8], neuro: [0.6, 0.3, 0.2], methods: [-0.5, -0.4, -0.3], running: [0.5, -0.5, -0.6], landscape: [-0.6, -0.6, 0.4] };
+  const CENT = { mind: [0.9, 0.2, 0.1], science: [0.2, -0.7, 0.5], scifi: [-0.3, 0.6, 0.8], fiction: [-0.9, 0, -0.3], philosophy: [0, 0.8, -0.8], neuro: [0.6, 0.3, 0.2], methods: [-0.5, -0.4, -0.3] };
   const XYZ = N0.map(n => { if (n.it.xyz) return n.it.xyz; const h = hash4(n.id + '#'); return (CENT[n.it.c] || [0, 0, 0]).map((v, k) => v + (h[k] - 0.5) * 0.55); });
   const VIEWS = [];
   function makeView(kind) {
@@ -378,10 +378,11 @@
     return '<div class="chips">' + tags.map(t => '<button class="chip' + (f.tags.has(t) ? ' on' : '') + '" data-k="' + k + '" data-tag="' + esc(t) + '">#' + esc(t) + '</button>').join('') + '</div>' +
       '<div class="chips">' + yrs.map(y => '<button class="chip' + (f.year === y ? ' on' : '') + '" data-k="' + k + '" data-year="' + y + '">' + y + '</button>').join('') + (any ? '<button class="chip clear" data-k="' + k + '" data-clear="1">clear</button>' : '') + '</div>';
   }
-  const LEG = '<span class="lg"><span>● writings</span><span>■ books</span><span>◆ photos</span></span>';
+  const LEG = '<span class="lg"><span>● writings</span><span>■ books</span></span>';
   function caption(k) {
+    const el = $('[data-cap="' + k + '"]'); if (!el) return;
     const v = VIEWS.find(x => x.kind === k), g = !v || v.mode === 'graph';
-    $('[data-cap="' + k + '"]').innerHTML = LEG + '<span>' + (g ? 'Lines are links between items. Hover to see what connects; drag to rearrange.' : 'Placed by the first three principal components of each item’s embedding. Lines are links.') + '</span>';
+    el.innerHTML = LEG + '<span>' + (g ? 'Lines are links between items. Hover to see what connects; drag to rearrange.' : 'Placed by the first three principal components of each item’s embedding. Lines are links.') + '</span>';
   }
   function refresh(k) {
     const items = KIND[k].items; if (!items.length) return;
@@ -391,15 +392,56 @@
     let rows = '';
     if (k === 'posts') rows = items.map((p, i) => { const j = nodeOf(k, i); return match(k, p) ? '<div class="entry" id="w-' + esc(p.id) + '" data-n="' + j + '"><span class="d">' + fmt(p.date) + '</span><span>' + (p.href ? '<a class="et" href="' + esc(p.href) + '">' + esc(p.t) + '</a>' : '<span class="et">' + esc(p.t) + '</span>') + '<span class="es">' + esc(p.tldr || '') + '</span><span class="meta2">' + (p.tags || []).map(t => '#' + esc(t)).join(' ') + '</span>' + linksHTML(j) + '</span></div>' : ''; }).join('');
     else if (k === 'books') rows = items.map((b, i) => { const j = nodeOf(k, i); return match(k, b) ? '<div class="entry" id="b-' + esc(b.id) + '" data-n="' + j + '" style="grid-template-columns:1fr"><span><span class="et">' + esc(b.t) + '</span><span class="ea">' + esc(b.a || '') + '</span>' + (b.note ? '<span class="es">' + esc(b.note) + '</span>' : '') + '<span class="meta2">read ' + fmt(b.read) + ' · ' + (b.tags || []).map(t => '#' + esc(t)).join(' ') + '</span>' + linksHTML(j) + '</span></div>' : ''; }).join('');
-    else rows = items.map((p, i) => { const j = nodeOf(k, i); return match(k, p) ? '<figure class="ptile entry" style="display:flex;padding:0;border:0" id="p-' + esc(p.id) + '" data-n="' + j + '"><div class="pimg" data-open="' + j + '">' + (p.src ? '<img src="' + esc(p.src) + '" alt="' + esc(p.t || '') + '" loading="lazy">' : '<div class="ph0">photo</div>') + '</div><figcaption>' + esc(p.t || '') + '<span class="meta2">' + fmt(p.date) + '</span></figcaption>' + linksHTML(j) + '</figure>' : ''; }).join('');
+    else rows = photoRows(items.filter(p => match(k, p)));
     const list = $('#' + k + 'List');
     list.innerHTML = rows || '<div class="none">Nothing matches these filters.</div>';
     const v = VIEWS.find(x => x.kind === k);
     list.querySelectorAll('[data-n]').forEach(el => { el.addEventListener('mouseenter', () => { if (v) v.hl = +el.dataset.n; }); el.addEventListener('mouseleave', () => { if (v) v.hl = -1; }); });
     if (dkind === k) { $('#fdrawer').innerHTML = chipsHTML(k); renderDrawer(); }
   }
+  // photos: one block per event (first tag), tiles in rows that widen the hovered photo
+  const titleCase = t => t.replace(/(^|\s)\S/g, c => c.toUpperCase());
+  function photoRows(ps) {
+    const per = MQ.matches ? 2 : 4, ev = new Map();
+    ps.forEach(p => { const e = (p.tags || [])[0] || 'other'; if (!ev.has(e)) ev.set(e, []); ev.get(e).push(p); });
+    return [...ev].map(([e, list]) => {
+      const last = list.map(p => p.date || '').sort().pop();
+      let rows = '';
+      for (let i = 0; i < list.length; i += per) {
+        const chunk = list.slice(i, i + per);
+        rows += '<div class="prow">' + chunk.map(p => '<figure class="ptile" id="p-' + esc(p.id) + '" data-photo="' + esc(p.id) + '"><img src="' + esc(p.src) + '" alt="' + esc(p.t || '') + '" loading="lazy"><figcaption>' + esc(p.t || '') + '</figcaption></figure>').join('') +
+          '<figure class="ptile sp" aria-hidden="true"></figure>'.repeat(per - chunk.length) + '</div>';
+      }
+      return '<div class="ev"><div class="evh"><span class="et">' + esc(titleCase(e)) + '</span><span class="d">' + fmt(last) + '</span></div>' + rows + '</div>';
+    }).join('');
+  }
+  MQ.addEventListener('change', () => refresh('photos'));
+
+  // photo viewer
+  const lb = $('#lb'), lbimg = $('#lbimg'), lbcap = $('#lbcap');
+  let lbSeq = [], lbAt = -1;
+  function showLB(i) {
+    lbAt = (i + lbSeq.length) % lbSeq.length; const p = lbSeq[lbAt];
+    lbimg.src = p.src; lbimg.alt = p.t || ''; lbcap.innerHTML = esc(p.t || '') + '<span class="d">' + fmt(p.date) + '</span>';
+    $('#lbp').style.visibility = $('#lbn').style.visibility = lbSeq.length > 1 ? '' : 'hidden';
+  }
+  function openLB(id) {
+    lbSeq = KIND.photos.items.filter(p => match('photos', p) && p.src);
+    const i = lbSeq.findIndex(p => p.id === id); if (i < 0) return;
+    showLB(i); lb.classList.add('on'); lb.setAttribute('aria-hidden', 'false');
+  }
+  function closeLB() { lb.classList.remove('on'); lb.setAttribute('aria-hidden', 'true'); lbAt = -1; }
+  $('#lbp').addEventListener('click', e => { e.stopPropagation(); showLB(lbAt - 1); });
+  $('#lbn').addEventListener('click', e => { e.stopPropagation(); showLB(lbAt + 1); });
+  lb.addEventListener('click', e => { if (e.target !== lbimg) closeLB(); });
+  addEventListener('keydown', e => {
+    if (lbAt < 0) return;
+    if (e.key === 'ArrowLeft') showLB(lbAt - 1); else if (e.key === 'ArrowRight') showLB(lbAt + 1);
+  });
+
   function hlList(k, j) { const l = $('#' + k + 'List'); l && l.querySelectorAll('[data-n]').forEach(el => el.classList.toggle('hl', +el.dataset.n === j)); }
   document.addEventListener('click', e => {
+    const ph = e.target.closest('[data-photo]'); if (ph) { openLB(ph.dataset.photo); return; }
     const g = e.target.closest('[data-go]'); if (g) { closeDrawer(); goNode(G.byId[g.dataset.go]); return; }
     const o = e.target.closest('[data-open]'); if (o) { goNode(+o.dataset.open); return; }
     const md = e.target.closest('[data-mode]'); if (md) { const v = VIEWS.find(x => x.kind === md.dataset.mode); v.mode = v.mode === 'graph' ? 'pca' : 'graph'; md.textContent = v.mode === 'graph' ? 'PCA view' : 'Graph view'; caption(v.kind); return; }
@@ -418,7 +460,7 @@
     const q = dfilter.value.trim().toLowerCase(), k = dkind;
     const src = KIND[k].items.map((it, i) => ({ it, t: it.t, s: k === 'books' ? it.a : fmt(it.date) })).filter(x => match(k, x.it));
     const rows = src.filter(x => !q || (x.t + ' ' + x.s).toLowerCase().includes(q)).sort((a, b) => a.t.localeCompare(b.t));
-    dlist.innerHTML = rows.map(x => '<a data-go="' + esc(x.it.id) + '">' + esc(x.t) + '<span class="au">' + esc(x.s || '') + '</span></a>').join('') || '<div class="au">No matches.</div>';
+    dlist.innerHTML = rows.map(x => '<a ' + (k === 'photos' ? 'data-photo' : 'data-go') + '="' + esc(x.it.id) + '">' + esc(x.t) + '<span class="au">' + esc(x.s || '') + '</span></a>').join('') || '<div class="au">No matches.</div>';
     $('#dtitle').textContent = ({ books: 'All books', posts: 'All writings', photos: 'All photos' })[k] + ' · ' + rows.length;
   }
   function openDrawer(kind) { dkind = kind; dfilter.value = ''; $('#fdrawer').innerHTML = chipsHTML(kind); renderDrawer(); drawer.classList.add('on'); drawer.setAttribute('aria-hidden', 'false'); }
@@ -426,7 +468,7 @@
   document.querySelectorAll('[data-all]').forEach(b => b.addEventListener('click', () => openDrawer(b.dataset.all)));
   $('#dclose').addEventListener('click', closeDrawer);
   dfilter.addEventListener('input', renderDrawer);
-  addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+  addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (lbAt >= 0) closeLB(); else closeDrawer(); });
 
   // ---------- contact ----------
   const MAIL = 'aliao3@andrew.cmu.edu';
